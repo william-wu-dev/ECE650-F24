@@ -1,0 +1,12 @@
+READ LINE: =
+
+READ LINE: + 3
+
+READ LINE: - 5
+
+READ LINE: + 2
+
+READ LINE: c
+
+READ LINE: + 3 5
+READ LINE: 
