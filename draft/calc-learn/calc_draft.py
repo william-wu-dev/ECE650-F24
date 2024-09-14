@@ -28,7 +28,8 @@ class MyTest(unittest.TestCase):
         self.assertEqual(val, '3')
 
     def test_parser_assert(self):
-        with
+        with self.assertRaises(SomeException):
+            do_something()
 
 def parse_line(line):
     sp = line.strip().split()  # strip all the leading or trailing spaces
