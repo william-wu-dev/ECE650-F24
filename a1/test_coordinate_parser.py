@@ -3,7 +3,7 @@
 import unittest
 from line_parser import coordinate_parser
 
-class ParserTest(unittest.TestCase):
+class CoordinateParserTest(unittest.TestCase):
     def test_normal(self):  
         coordinates_line = '''(2,-1) (2,2) (5,5) (5,6) (3,8)'''
         self.assertEqual(coordinate_parser(coordinates_line), [(2, -1), (2, 2), (5, 5), (5, 6), (3, 8)])
@@ -32,6 +32,9 @@ class ParserTest(unittest.TestCase):
 
     def test_unexpected_char_between_coordinate(self):
         coordinates_line = '''(2,-1) (2,2) (5,5) (5,6) 5,4 (3,8)'''
+        with self.assertRaises(Exception) as ctx:
+            coordinate_parser(coordinates_line)
+        coordinates_line = '''ab (2,-1) (2,2) (5,5) (5,6) (5,4) (3,8)'''
         with self.assertRaises(Exception) as ctx:
             coordinate_parser(coordinates_line)
 

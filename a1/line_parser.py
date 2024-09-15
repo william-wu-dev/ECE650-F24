@@ -8,7 +8,7 @@ author: Yulin Wu
 email: y297wu@uwaterloo.ca
 """
 
-def parser(line):
+def line_parser(line):
     """
     This parser parse one line of string command into command, street name and coordinates. 
     The parser is expected to raise syntax and sematic errors.
@@ -41,7 +41,7 @@ def parser(line):
         raise Exception(f'command `{command}\' not valid.')
     
     # check syntax based on command
-    if command == 'add':
+    if command == 'add' or command == 'mod':
         # check argument number
         if len(l) < 3:
             raise Exception(f'missing arguments for `{command}\'')
@@ -49,6 +49,7 @@ def parser(line):
             raise Exception(f'too many arguments for `{command}\'')
         # check street name
         street_name = l[1]
+        street_name = street_name.lower()  # street name is not case sensitive
         if street_name == '':
             raise Exception(f'missing street name for `{command}\'')
         # check and parse coordinates
@@ -59,10 +60,18 @@ def parser(line):
         if len(coordinates_list) <= 1:
             raise Exception(f'there should be more than one coordinate for `{command}\'')
         return command, street_name, coordinates_list
-    elif command == 'mod':
-        pass
     elif command == 'rm':
-        pass
+        # check argument number
+        if len(l) < 2:
+            raise Exception(f'missing arguments for `{command}\'')
+        elif len(l) > 2 and len(l[2]) != 0:
+            raise Exception(f'too many arguments for `{command}\'')
+        # check street name
+        street_name = l[1]
+        street_name = street_name.lower()  # street name is not case sensitive
+        if street_name == '':
+            raise Exception(f'missing street name for `{command}\'')
+        return command, street_name, []
     elif command == 'gg':
         # check argument number
         if len(l) > 1:
