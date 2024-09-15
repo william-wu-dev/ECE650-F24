@@ -6,7 +6,7 @@ import unittest
 
 
 class MyTest(unittest.TestCase):
-    def test_upper(self):
+    def test_upper(self):  # every test case function must start with test_
         """Test the upper() function of class string"""
         self.assertEqual('foo'.upper(), 'FOO')
 
