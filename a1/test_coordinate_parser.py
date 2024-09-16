@@ -45,6 +45,9 @@ class CoordinateParserTest(unittest.TestCase):
         coordinates_line = '''(2,-1) (2,2) (5,5) (5,6) (3,, 8)'''
         with self.assertRaises(Exception) as ctx:
             coordinate_parser(coordinates_line)
+        coordinates_line = '''(2,-1) (2,2) (5,5) (5,6) (38)'''
+        with self.assertRaises(Exception) as ctx:
+            coordinate_parser(coordinates_line)
 
     def test_nan_error(self):
         coordinates_line = '''(2,-1) (2,2) (5,5) (5,6) (3, 8a)'''
