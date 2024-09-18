@@ -88,15 +88,17 @@ def overlap_intersect(p1: Point, q1: Point, p2: Point, q2: Point):
     elif max(p1.x, q1.x) == min(p2.x, q2.x):
         # seg 2 and seg 1 intersect on end-point
         if q1.x > p1.x:  # return the max in seg 1
-            return q1
+            return  [q1]
         else:
-            return p1
+            return [p1]
     elif max(p2.x, q2.x) == min(p1.x, q1.x):
         # seg 2 and seg 1 intersect on end-point
         if q2.x > p2.x:  # return the max in seg 2
-            return q2
+            return [q2]
         else:
-            return p2
+            return [p2]
+    else:
+        return []
 
 
 def get_orientation(a: Point, b: Point, c: Point) -> int:
