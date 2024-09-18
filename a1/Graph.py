@@ -42,6 +42,25 @@ class Graph():
         else:
             self._edges[u_id] = [v_id, ]
 
+    def check_vertex(self, coordinate):
+        return coordinate in self._vertices
+    
+    def get_vertex_id(self, coordinate):
+        if coordinate not in self._vertices:
+            raise Exception(f'in Graph get vertex id, {coordinate} not exist')
+        return self._vertices[coordinate]
+    
+    def check_edge(self, u_id, v_id):
+        # check if id exists
+        if u_id not in self._vertices.values():
+            raise Exception(f'in Graph check edge, u-id {u_id} not found.')
+        if v_id not in self._vertices.values():
+            raise Exception(f'in Graph check edge, v-id {v_id} not found.')
+        # check if u-id < v-id
+        if not u_id < v_id:
+            raise Exception(f'in Graph check edge, u-id {u_id} is not smaller than v-id {v_id}.')
+        return u_id in self._edges and v_id in self._edges[u_id]
+
     def __str__(self) -> str:
         # TODO: finish this print according to the output sample.
         return ''
