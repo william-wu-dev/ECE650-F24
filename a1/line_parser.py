@@ -44,41 +44,41 @@ def line_parser(line):
     if command == 'add' or command == 'mod':
         # check argument number
         if len(l) < 3:
-            raise Exception(f'missing arguments for `{command}\'')
+            raise Exception(f'missing arguments for `{command}\'.')
         elif len(l) > 3:
-            raise Exception(f'too many arguments for `{command}\'')
+            raise Exception(f'too many arguments for `{command}\'.')
         # check street name
         street_name = l[1]
         street_name = street_name.lower()  # street name is not case sensitive
         if street_name == '':
-            raise Exception(f'missing street name for `{command}\'')
+            raise Exception(f'missing street name for `{command}\'.')
         # check and parse coordinates
         coordinates_line = l[2]
         if coordinates_line == '':
-            raise Exception(f'missing coordinates for `{command}\'')
+            raise Exception(f'missing coordinates for `{command}\'.')
         coordinates_list = coordinate_parser(coordinates_line)
         if len(coordinates_list) <= 1:
-            raise Exception(f'there should be more than one coordinate for `{command}\'')
+            raise Exception(f'there should be more than one coordinate for `{command}\'.')
         return command, street_name, coordinates_list
     elif command == 'rm':
         # check argument number
         if len(l) < 2:
-            raise Exception(f'missing arguments for `{command}\'')
+            raise Exception(f'missing arguments for `{command}\'.')
         elif len(l) > 2 and len(l[2]) != 0:
-            raise Exception(f'too many arguments for `{command}\'')
+            raise Exception(f'too many arguments for `{command}\'.')
         # check street name
         street_name = l[1]
         street_name = street_name.lower()  # street name is not case sensitive
         if street_name == '':
-            raise Exception(f'missing street name for `{command}\'')
+            raise Exception(f'missing street name for `{command}\'.')
         return command, street_name, []
     elif command == 'gg':
         # check argument number
         if len(l) > 1:
-            raise Exception(f'too many arguments for `{command}\'')
+            raise Exception(f'too many arguments for `{command}\'.')
         return command, '', []
     else:
-        raise Exception(f'{command}: Unknown error 1')
+        raise Exception(f'{command}: Unknown error 1.')
 
 def coordinate_parser(coordinates_line):
     #   test parentheses match and some unexpected characters between coordinates
@@ -89,11 +89,11 @@ def coordinate_parser(coordinates_line):
         elif ch == ')':
             parentheses_match_indicator -= 1
         elif ch != ' ' and parentheses_match_indicator <= 0:
-            raise Exception(f'unexpected character between coordinates in {coordinates_line}')
+            raise Exception(f'unexpected character between or around coordinates in {coordinates_line}.')
         if parentheses_match_indicator < -1 or parentheses_match_indicator > 1:
-            raise Exception(f'nesting parentheses is not allowed in {coordinates_line}')
+            raise Exception(f'nesting parentheses is not allowed in {coordinates_line}.')
     if parentheses_match_indicator != 0:
-        raise Exception(f'coordinates parentheses not match in {coordinates_line}')
+        raise Exception(f'coordinates parentheses not match in {coordinates_line}.')
     #   test all coordinates are valid and parse valid coordinates
     #   1. cut coordinate line into list of coordinates containing format like (a, b),
     #       a b might be invalid
@@ -107,7 +107,7 @@ def coordinate_parser(coordinates_line):
     for coordinate in coordinates_list:
         parts = re.split(r',', coordinate)  # split x and y by comma
         if len(parts) != 2:
-            raise Exception(f'one comma is expected in coordinate {coordinate}')
+            raise Exception(f'one comma is expected in coordinate {coordinate}.')
         
         x = parts[0]
         y = parts[1]
@@ -120,5 +120,5 @@ def coordinate_parser(coordinates_line):
             y = int(y)
             parse_result.append((x, y))
         except ValueError as inst:
-            raise Exception(f'not-a-integer-number found in coordinate {coordinate}')
+            raise Exception(f'not-a-integer-number found in coordinate {coordinate}.')
     return parse_result
