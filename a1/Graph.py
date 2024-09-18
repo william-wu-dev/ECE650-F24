@@ -12,11 +12,11 @@ class Graph():
         self._edges = dict()  # <k: smaller vertex id, v: list of vertex id that form a qualified edge with key vertex id>
         # note: this graph is undirected, so <u,v> will be stored once if u-id < v-id
 
-    def add_vertex(self, coordinate):
+    def add_vertex(self, coordinate: tuple):
         # check if the coordinate is already in the vertices
-        # FIXME: whether you should raise exception or just return id is depend on algorithm
+        # FIX: change this logic, duplicate add will not raise error
         if coordinate in self._vertices:
-            raise Exception(f'in Graph add vertex, {coordinate} already added.')
+            return self._vertices[coordinate]
         self._vertices[coordinate] = self._cnt  # assign this new id
         res = self._cnt  # prepare for return
         self._cnt += 1  # self-increment indicator
@@ -32,9 +32,9 @@ class Graph():
         if not u_id < v_id:
             raise Exception(f'in Graph add edge, u-id {u_id} is not smaller than v-id {v_id}.')
         # check if edge already added, using shortcut circuit
-        # FIXME: whether you should raise exception or just return id is depend on algorithm
+        # FIX: if already added, nothing will happen
         if u_id in self._edges and v_id in self._edges[u_id]:
-            raise Exception(f'in Graph add edge, edge <{u_id}, {v_id}> already added.')
+            return 
         
         # add this edge
         if u_id in self._edges:
@@ -42,10 +42,10 @@ class Graph():
         else:
             self._edges[u_id] = [v_id, ]
 
-    def check_vertex(self, coordinate):
+    def check_vertex(self, coordinate: tuple):
         return coordinate in self._vertices
     
-    def get_vertex_id(self, coordinate):
+    def get_vertex_id(self, coordinate: tuple):
         if coordinate not in self._vertices:
             raise Exception(f'in Graph get vertex id, {coordinate} not exist')
         return self._vertices[coordinate]
@@ -63,4 +63,35 @@ class Graph():
 
     def __str__(self) -> str:
         # TODO: finish this print according to the output sample.
-        return ''
+        # sort vertices based on the id
+        vertices_sorted = {k: v for k, v in sorted(self._vertices.items(), key= lambda item: item[1])}
+        # sort edge based on u_id
+        edges_sorted = {k: v for k, v in sorted(self._edges.items(), key=lambda item: item[0])}
+        # print vertices first
+        res = 'V = {'
+        for coordinate, id in vertices_sorted.items():
+            res += '\n'
+            res += '  '
+            res += str(id)
+            res += ': '
+            res += f'({coordinate[0]:.2f},{coordinate[1]:.2f})'
+        res += '\n'
+        res += '}'
+
+        res += '\n'
+
+        # print edges
+        res += 'E = {'
+        flag = False
+        for u_id, v_id_list in edges_sorted.items():
+            for v_id in v_id_list:
+                res += '\n'
+                res += '  '
+                res += f'<{u_id},{v_id}>,'
+                if not flag:
+                    flag = True
+        if flag:
+            res = res[:-1] # get rid of trailing comma if printed
+        res += '\n'
+        res += '}'
+        return res
