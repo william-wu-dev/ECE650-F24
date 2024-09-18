@@ -1,0 +1,6 @@
+Error: not-a-integer-number found in coordinate (4, 8a)
+Error: one comma is expected in coordinate (4 8)
+Error: one comma is expected in coordinate (48)
+Error: one comma is expected in coordinate (4, , 8)
+Error: unexpected character between or around coordinates in 2,4 (4,2) (4, 8)
+Error: `add' specified a street with duplicated segment vertices.

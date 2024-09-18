@@ -1,0 +1,4 @@
+Error: command `addd' not valid.
+Error: command `mo d' not valid.
+Error: command `rrm' not valid.
+Error: command `g g' not valid.
