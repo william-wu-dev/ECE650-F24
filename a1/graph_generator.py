@@ -21,10 +21,13 @@ def graph_generator(sdb: StreetDatabase) -> Graph:
 
     # double pointer iterate sdb find intersection
     street_list = list(sdb._streetDatabase.keys())
-    for i in range(0, len(street_list) - 1):
-        for j in range(i + 1, len(street_list)):
-            street_1 = street_list[i]
-            street_2 = street_list[j]
+    # print("==================")  # debug line
+    # print(f'street len: {len(street_list)}')  # debug line
+    for ii in range(0, len(street_list) - 1):  # warning, i is already used in the later part of the loop, something nasty will happen. FIX: change to ii and jj
+        for jj in range(ii + 1, len(street_list)):
+            # print((ii, jj))  # debug line
+            street_1 = street_list[ii]
+            street_2 = street_list[jj]
             # count the intersection for every segment in 1 X every segment in 2
             coordinates_list_1 = sdb._streetDatabase[street_1]
             coordinates_list_2 = sdb._streetDatabase[street_2]
