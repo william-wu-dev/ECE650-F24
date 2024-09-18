@@ -40,3 +40,5 @@ Temporary Items
 
 **/__pycache__/
 **/core
+**/test_out
+**/test_err
