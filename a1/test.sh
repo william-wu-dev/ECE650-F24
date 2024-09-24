@@ -2,6 +2,16 @@
 
 python3 a1ece650.py < test_in.txt > test_out.txt 2>test_err.txt
 
+if [ ! -d "./test_out" ] 
+then
+    mkdir ./test_out
+fi
+
+if [ ! -d "./test_err" ] 
+then
+    mkdir ./test_err
+fi
+
 TEST_CASE_COUNT=9
 readonly TEST_CASE_COUNT
 
