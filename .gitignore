@@ -43,4 +43,4 @@ Temporary Items
 **/test_out
 **/test_err
 
-**/cmake-build-debug
+**/cmake-build-*
