@@ -13,6 +13,9 @@ export PATH="/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch6
 PATH_TO_SOURCE="./"
 PATH_TO_BUILD="./cmake-build-debug"
 
+# clear cmake build path
+rm -rf ${PATH_TO_BUILD}/*
+
 # build based on mode
 
 if [ $# -ne 1 ]; then
@@ -44,10 +47,14 @@ TARGET_NAME="my_clion_project"
 
 if [ ! -d "./test_out" ]; then
     mkdir ./test_out
+else
+    rm -rf ./test_out/*
 fi
 
 if [ ! -d "./test_err" ]; then
     mkdir ./test_err
+else
+    rm -rf ./test_err/*
 fi
 
 # FIXME: change this to fit your test case count
