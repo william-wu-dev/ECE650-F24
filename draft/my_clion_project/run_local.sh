@@ -2,7 +2,7 @@
 # FIXME: comment out if this is on linux
 if [ ! -d "/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/" ]
 then
-    printf "/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/ no such directory, please plug in the external disk"
+    printf "/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/ no such directory, please plug in the external disk\n"
     exit 1
 fi
 
@@ -18,7 +18,7 @@ PATH_TO_BUILD="./cmake-build-debug"
 
 if [ $# -ne 1 ]
 then
-    printf "only 1 argument is allowed to specify cmake mode"
+    printf "only 1 argument is allowed to specify cmake mode\n"
     exit 1
 fi
 
@@ -35,7 +35,7 @@ then
     printf "starting cmake \n"
     cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DWITH_ASAN=ON -S ${PATH_TO_SOURCE} -B ${PATH_TO_BUILD}
 else
-    printf "unknown argument \"$1\", 0 for plain cmake, 1 for clang++ compile, 2 for address sanination activation."
+    printf "unknown argument \"$1\", 0 for plain cmake, 1 for clang++ compile, 2 for address sanination activation.\n"
     exit 1
 fi
 
