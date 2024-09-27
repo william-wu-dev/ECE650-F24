@@ -4,6 +4,11 @@
 
 using namespace std;
 
+void foo() noexcept(false)
+{
+    throw GeneralException("some error in foo");
+}
+
 int main()
 {
     while (!cin.eof())
@@ -34,9 +39,18 @@ int main()
         //     cerr << error_msg << endl;
         // }
 
+        // try
+        // {
+        //     throw GeneralException("some error 321654");
+        // }
+        // catch (exception &e)
+        // {
+        //     cerr << e.what() << endl;
+        // }
+
         try
         {
-            throw GeneralException("some error 321654");
+            foo();
         }
         catch (exception &e)
         {
