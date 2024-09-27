@@ -1,14 +1,3 @@
-# check if exist
-# FIXME: comment out if this is on linux
-if [ ! -d "/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/" ]; then
-    printf "/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/ no such directory, please plug in the external disk\n"
-    exit 1
-fi
-
-# prepare for cmake
-# FIXME: comment out if this is on linux
-export PATH="/Volumes/macOS/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/:${PATH}"
-
 # FIXME: change this to fit your project
 PATH_TO_SOURCE="./"
 PATH_TO_BUILD="./cmake-build-debug"

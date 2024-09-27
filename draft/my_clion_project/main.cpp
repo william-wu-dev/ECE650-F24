@@ -1,4 +1,6 @@
 #include <iostream>
+#include "general_exception.h"
+#include <exception>
 
 using namespace std;
 
@@ -23,13 +25,22 @@ int main()
         //     cerr << error_msg << endl;
         // }
 
+        // try
+        // {
+        //     throw string("some error 123456");
+        // }
+        // catch (string error_msg)
+        // {
+        //     cerr << error_msg << endl;
+        // }
+
         try
         {
-            throw string("some error 123456");
+            throw GeneralException("some error 321654");
         }
-        catch (string error_msg)
+        catch (exception &e)
         {
-            cerr << error_msg << endl;
+            cerr << e.what() << endl;
         }
 
         cout << line << endl;
