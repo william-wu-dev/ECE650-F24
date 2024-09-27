@@ -1,5 +1,5 @@
-#ifndef GENERAL_EXCEPTION_H
-#define GENERAL_EXCEPTION_H
+#ifndef GENERAL_EXCEPTION_HPP
+#define GENERAL_EXCEPTION_HPP
 
 #include <exception>
 #include <string>
@@ -17,4 +17,4 @@ public:
      }
 };
 
-#endif // GENERAL_EXCEPTION_H
+#endif // GENERAL_EXCEPTION_HPP

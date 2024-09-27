@@ -1,5 +1,5 @@
 #include <iostream>
-#include "general_exception.h"
+#include "general_exception.hpp"
 #include <exception>
 
 using namespace std;

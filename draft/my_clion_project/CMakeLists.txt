@@ -3,4 +3,4 @@ project(my_clion_project)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(my_clion_project main.cpp general_exception.h)
+add_executable(my_clion_project main.cpp general_exception.hpp)
