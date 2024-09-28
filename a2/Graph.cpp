@@ -12,7 +12,6 @@ namespace a2 {
     }
 
     void Graph::addEdge(int from, int to, int weight) noexcept(false) {
-        // TODO: check exceed-limit from to and from == to
         // check vertex validity
         if (from > vertexCount) {
             std::string message = "vertex ";
