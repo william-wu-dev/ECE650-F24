@@ -1,5 +1,5 @@
 //
-// Created by Michael Williams on 2024-09-28.
+// Created by Yulin Wu on 2024-09-28.
 //
 
 #ifndef GRAPH_H
