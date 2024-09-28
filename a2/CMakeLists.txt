@@ -5,17 +5,27 @@ project(ece650-a2)
 ## Project specific configurations go here
 
 # enable c++11 support
-set (CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
 
 option(WITH_ASAN "Enabled AddressSanitizer to detect memory faults" OFF)
-if(WITH_ASAN)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined" )
-endif()
+if (WITH_ASAN)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
+endif ()
 
 
 # create the main executable
 ## add additional .cpp files if needed
-add_executable(ece650-a2 ece650-a2.cpp )
+add_executable(ece650-a2 ece650-a2.cpp
+        graph.cpp
+        graph.h
+        GeneralException.h)
 
 # create the executable for tests
-add_executable(tests test.cpp)
+add_executable(tests test.cpp
+        graph.cpp
+        graph.h
+        GeneralException.h)
+add_executable(test_graph test_graph.cpp
+        graph.cpp
+        graph.h
+)
