@@ -2,75 +2,418 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include "Graph.h"
+#include "GeneralException.h"
 
-int main(int argc, char** argv) {
-    // Test code. Replaced with your code
+enum State {
+    START,
+    V_SPECIFIED,
+    E_SPECIFIED
+};
 
-    // Print command line arguments that were used to start the program
-    std::cout << "Called with " << argc << " arguments\n";
-    for (int i = 0; i < argc; ++i)
-        std::cout << "Arg " << i << " is " << argv[i] << "\n";
+const char COMMA = ',';
+const char LT = '<';
+const char GT = '>';
+const char LB = '{';
+const char RB = '}';
 
-    // separator character
-    const char comma = ',';
-
+int main(int argc, char **argv) {
+    // initialize Finite State Machine
+    auto state = START;
+    auto graph = a2::Graph(0); // initialize an empty graph
     // read from stdin until EOF
     while (!std::cin.eof()) {
-        // print a promt
-        std::cout << "Enter numbers separated by comma: ";
-
         // read a line of input until EOL and store in a string
         std::string line;
         std::getline(std::cin, line);
+
+        // ignore empty line
+        if (line.empty()) {
+            continue;
+        }
 
         // create an input stream based on the line
         // we will use the input stream to parse the line
         std::istringstream input(line);
 
-        // we expect each line to contain a list of numbers
-        // this vector will store the numbers.
-        // they are assumed to be unsigned (i.e., positive)
-        std::vector<unsigned> nums;
+        // actions based on FSM
+        try {
+            switch (state) {
+                case START: {
+                    // V specification is expected
+                    char command;
+                    input >> command;
+                    if (input.fail()) {
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        throw a2::GeneralException("Unable to read command.");
+                    }
+                    if (command != 'V') {
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "expect \'V\' to start a graph specification, but receive: ";
+                        message += command;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
 
-        // while there are characters in the input line
-        while (!input.eof()) {
-            unsigned num;
-            // parse an integer
-            input >> num;
-            if (input.fail()) {
-                std::cerr << "Error parsing a number\n";
-                break;
+                    // read vertex specification
+                    int vertexCount;
+                    input >> vertexCount;
+                    // check vertex specification validity
+                    if (input.fail()) {
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "unable to read vertex specification in command: ";
+                        message += line;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+                    // NOTE: do not just use eof here, because previous read is just for one character, input only know that
+                    // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
+                    // and input will know that it hits an EOF or not. If hits an EOF, reading would be failed.
+                    char dummy;
+                    input >> dummy;
+                    if (!input.eof()) {
+                        // unexpected symbols following specification
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "encounter unexpected argument in command: ";
+                        message += line;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+                    // if all checked, set graph
+                    try {
+                        graph.reset(vertexCount);
+                    } catch (std::exception &e) {
+                        state = START;
+                        throw; // rethrow the exception.
+                    }
+                    // change state
+                    state = V_SPECIFIED;
+                    break;
+                }
+                case V_SPECIFIED: {
+                    // E specification is expected
+                    char command;
+                    input >> command;
+                    if (input.fail()) {
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        throw a2::GeneralException("Unable to read command.");
+                    }
+                    if (command != 'E') {
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "expect \'E\' to specify edges, but receive: ";
+                        message += command;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+
+                    // read edge specification
+                    char left_brace;
+                    input >> left_brace;
+                    if (input.fail()) {
+                        // read failed
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "unable to read edge specification in command: ";
+                        message += line;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+                    if (left_brace != LB) {
+                        // encounter unexpected starting symbol
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "expect \'{\' to start edges specification, but receive: ";
+                        message += left_brace;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+
+                    // use flag to control the edge parsing process
+                    bool flag = true;
+                    // if facing comma after an edge, remain true; if facing right brace halt; otherwise, error
+                    while (flag) {
+                        // read lt
+                        char less_than;
+                        input >> less_than;
+                        if (input.fail()) {
+                            // reading failed
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "unable to read a \'<\' in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+                        if (less_than != LT) {
+                            // not lt symbol
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "expect \'<\' in the specification of an edge, but receive: ";
+                            message += less_than;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // read a number
+                        int from;
+                        input >> from;
+                        if (input.fail()) {
+                            // reading failed
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "unable to read the starting vertex of an edge in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // read a comma
+                        char comma;
+                        input >> comma;
+                        if (input.fail()) {
+                            // reading failed
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "unable to read a \',\' in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+                        if (comma != COMMA) {
+                            // not comma symbol
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "expect \',\' in the specification of an edge, but receive: ";
+                            message += comma;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // read another number
+                        int to;
+                        input >> to;
+                        if (input.fail()) {
+                            // reading failed
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "unable to read the ending vertex of an edge in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // read gt symbol
+                        char greater_than;
+                        input >> greater_than;
+                        if (input.fail()) {
+                            // reading failed
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "unable to read a \'>\' in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+                        if (greater_than != GT) {
+                            // not lt symbol
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "expect \'>\' in the specification of an edge, but receive: ";
+                            message += greater_than;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // complete reading an edge, add it
+                        try {
+                            graph.addEdge(from, to, 1);
+                        } catch (std::exception &e) {
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            throw; // rethrow the exception to handle the print out
+                        }
+
+                        // use the next symbol to determine whether loop should continue or halt
+                        char indicator;
+                        input >> indicator;
+                        if (input.fail()) {
+                            // reading failed
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = R"(unable to read a edge-separator ',' or end sign '}' in command: )";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+                        if (indicator != COMMA && indicator != RB) {
+                            // unknown symbol
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "encounter unexpected symbol between edges: ";
+                            message += indicator;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        if (indicator == COMMA) {
+                            flag = true;
+                        } else if (indicator == RB) {
+                            flag = false;
+                        } else {
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            throw a2::GeneralException(R"(unexpected error.)");
+                        }
+                    }
+
+                    // check if there is unexpected argument following
+                    // NOTE: do not just use eof here, because previous read is just for one character, input only know that
+                    // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
+                    // and input will know that it hits an EOF or not. If hits an EOF, reading would be failed.
+                    char dummy;
+                    input >> dummy;
+                    if (!input.eof()) {
+                        // unexpected symbols following specification
+                        // reset FSM to start over, because VE occurs together
+                        state = START;
+                        std::string message = "encounter unexpected argument in command: ";
+                        message += line;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+
+                    // set state to edge specified
+                    state = E_SPECIFIED;
+                    break;
+                }
+                case E_SPECIFIED: {
+                    // REGULATION:
+                    // in this state, only V command will and is bound to change the state to V specified or start (if V command is error),
+                    // other command, no matter correct or error
+                    // will not change the state.
+                    char command;
+                    input >> command;
+                    if (input.fail()) {
+                        // remain at this state because a graph is already specified.
+                        state = E_SPECIFIED;
+                        throw a2::GeneralException("Unable to read command.");
+                    }
+                    if (command != 'V' && command != 's') {
+                        // reset FSM to start over, because VE occurs together
+                        state = E_SPECIFIED;
+                        std::string message =
+                                R"(expect 'V' to start a graph specification or 's' to generate shortest path, but receive: )";
+                        message += command;
+                        message += ".";
+                        throw a2::GeneralException(message);
+                    }
+
+                    if (command == 'V') {
+                        // if receive V command, reset graph and change state to V specified.
+                        // read vertex specification
+                        int vertexCount;
+                        input >> vertexCount;
+                        // check vertex specification validity
+                        if (input.fail()) {
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "unable to read vertex specification in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+                        // NOTE: do not just use eof here, because previous read is just for one character, input only know that
+                        // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
+                        // and input will know that it hits an EOF or not. If hits an EOF, reading would be failed.
+                        char dummy;
+                        input >> dummy;
+                        if (!input.eof()) {
+                            // unexpected symbols following specification
+                            // reset FSM to start over, because VE occurs together
+                            state = START;
+                            std::string message = "encounter unexpected argument in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+                        // if all checked, set graph
+                        try {
+                            graph.reset(vertexCount);
+                        } catch (std::exception &e) {
+                            state = START;
+                            throw; // rethrow the exception.
+                        }
+                        // change state
+                        state = V_SPECIFIED;
+                    } else if (command == 's') {
+                        // get from and to, generate the shortest path
+
+                        // get from
+                        int from;
+                        input >> from;
+                        if (input.fail()) {
+                            // reading failed
+                            state = E_SPECIFIED;
+                            std::string message = "unable to read the starting vertex of an edge in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // get to
+                        int to;
+                        input >> to;
+                        if (input.fail()) {
+                            // reading failed
+                            state = E_SPECIFIED;
+                            std::string message = "unable to read the ending vertex of an edge in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // check unexpected following symbol
+                        // NOTE: do not just use eof here, because previous read is just for one character, input only know that
+                        // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
+                        // and input will know that it hits an EOF or not. If hits an EOF, reading would be failed.
+                        char dummy;
+                        input >> dummy;
+                        if (!input.eof()) {
+                            // unexpected symbols following specification
+                            state = E_SPECIFIED;
+                            std::string message = "encounter unexpected argument in command: ";
+                            message += line;
+                            message += ".";
+                            throw a2::GeneralException(message);
+                        }
+
+                        // generate the shortest graph
+                        try {
+                            std::cout << graph.compute(from, to) << std::endl;
+                        } catch (std::exception &e) {
+                            state = E_SPECIFIED; // exception in s will make the state remain at e specified.
+                            throw; // rethrow the exception
+                        }
+
+                        // change state
+                        state = E_SPECIFIED;
+                    } else {
+                        state = E_SPECIFIED;
+                        throw a2::GeneralException(R"(unexpected error.)");
+                    }
+                    break;
+                }
             }
-            else
-                nums.push_back(num);
-
-            // if eof bail out
-            if (input.eof())
-                break;
-
-            // read a character
-            // Note that whitespace is ignored
-            char separator;
-            input >> separator;
-
-            // if error parsing, or if the character is not a comma
-            if (input.fail() || separator != comma) {
-                std::cerr << "Error parsing separator\n";
-                break;
-            }
+        } catch (std::exception &e) {
+            std::cerr << "Error: " << e.what() << std::endl;
         }
-
-        // done parsing a line, print the numbers
-        if (!nums.empty()) {
-            std::cout << "\nYou have entered " << nums.size() << " numbers: ";
-            size_t i = 0;
-            for (unsigned x : nums) {
-                std::cout << x;
-                // print a comma if not the last number
-                i++;
-                if (i < nums.size()) std::cout << ",";
-            }
-        }
-        std::cout << std::endl;
     }
+
+    return 0;
 }
