@@ -13,7 +13,7 @@ namespace a2 {
 
     void Graph::addEdge(int from, int to, int weight) noexcept(false) {
         // check vertex validity
-        if (from > vertexCount) {
+        if (from > vertexCount || from <= 0) {
             std::string message = "vertex ";
             message += std::to_string(from);
             message += " of edge <";
@@ -23,7 +23,7 @@ namespace a2 {
             message += "> is not defined.";
             throw GeneralException(message);
         }
-        if (to > vertexCount) {
+        if (to > vertexCount || to <= 0) {
             std::string message = "vertex ";
             message += std::to_string(to);
             message += " of edge <";
@@ -111,5 +111,16 @@ namespace a2 {
             result += std::to_string(path[i]);
         }
         return result;
+    }
+
+    void Graph::reset(int vertexCount) {
+        if (vertexCount <= 0) {  // invalid format
+            std::string message = "vertex specification ";
+            message += std::to_string(vertexCount);
+            message += " is invalid.";
+            throw GeneralException(message);
+        }
+        this->vertexCount = vertexCount;
+        this->edges.clear();
     }
 } // a2

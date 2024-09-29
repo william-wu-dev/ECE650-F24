@@ -76,3 +76,8 @@ TEST_CASE("Check Add Self Loop") {
     auto graph = a2::Graph(15);
     CHECK_THROWS_WITH_AS(graph.addEdge(2, 2, 1), "edge <2, 2> incident on the same vertex is not allowed.", a2::GeneralException);
 }
+
+TEST_CASE("Check Reset Invalid") {
+    auto graph = a2::Graph(0);
+    CHECK_THROWS_WITH_AS(graph.reset(0), "vertex specification 0 is invalid.", a2::GeneralException);
+}
