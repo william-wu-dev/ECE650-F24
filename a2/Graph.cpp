@@ -59,6 +59,25 @@ namespace a2 {
     }
 
     std::string Graph::compute(int from, int to) noexcept(false) {
+        // check vertex validity
+        if (from > vertexCount || from <= 0) {
+            std::string message = "vertex ";
+            message += std::to_string(from);
+            message += " is not defined.";
+            throw GeneralException(message);
+        }
+        if (to > vertexCount || to <= 0) {
+            std::string message = "vertex ";
+            message += std::to_string(to);
+            message += " is not defined.";
+            throw GeneralException(message);
+        }
+        if (from == to) {
+            std::string message = "asking for a shortest path from one vertex ";
+            message += std::to_string(from);
+            message += " to itself is not allowed.";
+            throw GeneralException(message);
+        }
         // initialization
         std::vector<int> distances(vertexCount + 1, 0x3f3f3f3f);
         // vertex number starts from 1, initialize distance to inf
