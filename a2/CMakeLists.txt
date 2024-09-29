@@ -16,16 +16,16 @@ endif ()
 # create the main executable
 ## add additional .cpp files if needed
 add_executable(ece650-a2 ece650-a2.cpp
-        graph.cpp
-        graph.h
+        Graph.cpp
+        Graph.h
         GeneralException.h)
 
 # create the executable for tests
 add_executable(tests test.cpp
-        graph.cpp
-        graph.h
+        Graph.cpp
+        Graph.h
         GeneralException.h)
 add_executable(test_graph test_graph.cpp
-        graph.cpp
-        graph.h
+        Graph.cpp
+        Graph.h
 )
