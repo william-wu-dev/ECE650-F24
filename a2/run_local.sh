@@ -2,6 +2,9 @@
 PATH_TO_SOURCE="./"
 PATH_TO_BUILD="./cmake-build-debug"
 
+# clear cmake build path
+#rm -rf ${PATH_TO_BUILD}/*
+
 # build based on mode
 
 if [ $# -ne 1 ]; then
@@ -33,14 +36,18 @@ TARGET_NAME="ece650-a2"
 
 if [ ! -d "./test_out" ]; then
     mkdir ./test_out
+else
+    rm -rf ./test_out/*
 fi
 
 if [ ! -d "./test_err" ]; then
     mkdir ./test_err
+else
+    rm -rf ./test_err/*
 fi
 
 # FIXME: change this to fit your test case count
-TEST_CASE_COUNT=4
+TEST_CASE_COUNT=6
 readonly TEST_CASE_COUNT
 
 printf "\n"
