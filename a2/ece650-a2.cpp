@@ -1,6 +1,7 @@
 // Compile with c++ ece650-a2cpp -std=c++11 -o ece650-a2
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <vector>
 #include "Graph.h"
 #include "GeneralException.h"
@@ -18,14 +19,34 @@ const char LB = '{';
 const char RB = '}';
 
 int main(int argc, char **argv) {
+    // create input and output file stream
+    if (argc != 3) {  // check argument count
+        std::cerr << "Usage: " << argv[0] << " input_file" << "output_file" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::ifstream ifile;
+    ifile.open(argv[1], std::ios::in);
+    if (!ifile.is_open()) {  // if unable to open input file, it should crash
+        std::cerr << "Error opening input file " << argv[1] << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::ofstream ofile;
+    ofile.open(argv[2], std::ios::out);
+    if (!ofile.is_open()) {  // if unable to open output file, it should crash
+        std::cerr << "Error opening output file " << argv[2] << std::endl;
+        return EXIT_FAILURE;
+    }
+
     // initialize Finite State Machine
     auto state = START;
     auto graph = a2::Graph(0); // initialize an empty graph
     // read from stdin until EOF
-    while (!std::cin.eof()) {
+    while (!ifile.eof()) {
         // read a line of input until EOL and store in a string
         std::string line;
-        std::getline(std::cin, line);
+        std::getline(ifile, line);
 
         // ignore empty line
         if (line.empty()) {
@@ -395,7 +416,7 @@ int main(int argc, char **argv) {
 
                         // generate the shortest graph
                         try {
-                            std::cout << graph.compute(from, to) << std::endl;
+                            ofile << graph.compute(from, to) << std::endl;
                         } catch (std::exception &e) {
                             state = E_SPECIFIED; // exception in s will make the state remain at e specified.
                             throw; // rethrow the exception
@@ -411,7 +432,7 @@ int main(int argc, char **argv) {
                 }
             }
         } catch (std::exception &e) {
-            std::cerr << "Error: " << e.what() << std::endl;
+            ofile << "Error: " << e.what() << std::endl;
         }
     }
 

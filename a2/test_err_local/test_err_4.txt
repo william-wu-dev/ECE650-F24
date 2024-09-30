@@ -1,5 +1,0 @@
-Error: 2 is not reachable from 1.
-Error: asking for a shortest path from one vertex 10 to itself is not allowed.
-Error: vertex 20 is not defined.
-Error: vertex 17 is not defined.
-Error: encounter unexpected argument in command: s 2 10 10.
