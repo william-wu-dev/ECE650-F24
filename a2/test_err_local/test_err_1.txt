@@ -1,0 +1,4 @@
+Error: vertex 6 of edge <6, 1> is not defined.
+Error: expect 'V' to start a graph specification, but receive: s.
+Error: vertex 6 of edge <1, 6> is not defined.
+Error: expect 'V' to start a graph specification, but receive: s.

@@ -1,0 +1,2 @@
+Error: vertex 16 of edge <15, 16> is not defined.
+Error: expect 'V' to start a graph specification, but receive: s.
