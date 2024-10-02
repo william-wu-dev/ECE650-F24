@@ -7,6 +7,7 @@
 
 #include <exception>
 #include <string>
+#include <utility>
 
 namespace a2 {
     class GeneralException : public std::exception {
@@ -14,10 +15,10 @@ namespace a2 {
         std::string message;
 
     public:
-        GeneralException(std::string message) : message(message) {
+        explicit GeneralException(std::string message) : message(std::move(message)) {
         };
 
-        virtual const char *what() const throw() {
+        const char *what() const noexcept override {
             return message.c_str();
         }
     };

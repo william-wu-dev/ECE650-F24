@@ -21,7 +21,7 @@ namespace a2 {
         std::vector<Edge> edges;
         // store the edges information; we will use bellman-ford algorithm; sequence doesn't matter
     public:
-        Graph(int vertexCount);
+        explicit Graph(int vertexCount);
 
         void addEdge(int from, int to, int weight);
 
