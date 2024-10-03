@@ -54,7 +54,7 @@ else
 fi
 
 # FIXME: change this to fit your test case count
-TEST_CASE_COUNT=7
+TEST_CASE_COUNT=9
 readonly TEST_CASE_COUNT
 
 printf "\n"
