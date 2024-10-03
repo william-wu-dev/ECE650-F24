@@ -1,0 +1,3 @@
+Error: vertex specification 1 is invalid.
+Error: expect 'V' to start a graph specification, but receive: E.
+Error: expect 'V' to start a graph specification, but receive: s.
