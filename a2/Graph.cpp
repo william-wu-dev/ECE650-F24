@@ -133,7 +133,8 @@ namespace a2 {
     }
 
     void Graph::reset(int vertexCount) {
-        if (vertexCount <= 0) {  // invalid format
+        if (vertexCount <= 1) {  // invalid format
+            // vertex count should be geq 2. (Post 107)
             std::string message = "vertex specification ";
             message += std::to_string(vertexCount);
             message += " is invalid.";
