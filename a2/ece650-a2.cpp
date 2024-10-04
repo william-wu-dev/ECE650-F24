@@ -6,6 +6,8 @@
 #include "Graph.h"
 #include "GeneralException.h"
 
+#define END_LINE_ENABLE false
+
 
 enum State {
     START,
@@ -405,7 +407,11 @@ int main(int argc, char **argv) {
 
                         // generate the shortest graph
                         try {
+#if END_LINE_ENABLE
                             std::cout << graph.compute(from, to) << std::endl;
+#else
+                            std::cout << graph.compute(from, to);
+#endif
                         } catch (std::exception &e) {
                             state = E_SPECIFIED; // exception in s will make the state remain at e specified.
                             throw; // rethrow the exception
@@ -421,7 +427,11 @@ int main(int argc, char **argv) {
                 }
             }
         } catch (std::exception &e) {
+#if END_LINE_ENABLE
             std::cerr << "Error: " << e.what() << std::endl;
+#else
+            std::cerr << "Error: " << e.what();
+#endif
         }
     }
     return 0;
