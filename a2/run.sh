@@ -1,5 +1,6 @@
 ARGUMENT_ENABLE=false
 CLEAR_BUILD_FOLDER=false
+SEPARATE_ERR_AND_OUT=false
 
 # FIXME: change this to fit your project
 PATH_TO_CMAKE_SOURCE="./"
@@ -64,7 +65,9 @@ for ((i = 1; i <= TEST_CASE_COUNT; i++)); do
     printf "starting test case #%d\n" ${i}
     if ${ARGUMENT_ENABLE}; then
         "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" "./test_in/test_in_${i}.txt" "./test_out/test_out_${i}.txt"
-    else
+    elif ${SEPARATE_ERR_AND_OUT}; then
         "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" >"./test_out/test_out_${i}.txt" 2>"./test_err/test_err_${i}.txt"
+    else
+        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" &>"./test_out/test_out_${i}.txt"
     fi
 done
