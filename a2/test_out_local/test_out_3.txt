@@ -1,0 +1,1 @@
+Error: vertex 6 is not defined.
