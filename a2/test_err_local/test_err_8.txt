@@ -1,2 +1,1 @@
-Error: 20 is not reachable from 1.
 Error: 18 is not reachable from 1.

@@ -1,2 +1,1 @@
 Error: vertex 6 is not defined.
-Error: vertex 6 is not defined.

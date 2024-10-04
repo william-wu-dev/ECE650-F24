@@ -53,10 +53,11 @@ int main(int argc, char **argv) {
                     if (command != 'V') {
                         // reset FSM to start over, because VE occurs together
                         state = START;
-                        std::string message = "expect \'V\' to start a graph specification, but receive: ";
-                        message += command;
-                        message += ".";
-                        throw a2::GeneralException(message);
+                        // std::string message = "expect \'V\' to start a graph specification, but receive: ";
+                        // message += command;
+                        // message += ".";
+                        // throw a2::GeneralException(message);
+                        continue;
                     }
 
                     // read vertex specification
