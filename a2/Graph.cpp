@@ -123,7 +123,7 @@ namespace a2 {
         std::reverse(path.begin(), path.end());
         // print out the path
         std::string result;
-        for (int i = 0; i < path.size(); i++) {
+        for (long unsigned int i = 0; i < path.size(); i++) {
             if (i) {
                 result += "-";
             }
