@@ -4,8 +4,8 @@
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
-#include "GeneralException.h"
-#include "Graph.h"
+#include "../GeneralException.h"
+#include "../Graph.h"
 
 TEST_CASE("Check Graph Computer Correct 1") {
     auto graph = a2::Graph(15);
