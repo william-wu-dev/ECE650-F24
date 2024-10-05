@@ -44,3 +44,4 @@ Temporary Items
 **/test_err
 
 **/cmake-build-*
+**/build
