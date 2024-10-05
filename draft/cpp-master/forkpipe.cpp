@@ -1,5 +1,7 @@
 #include <unistd.h>
 #include <iostream>
+#include <sys/types.h>  // for waitpid
+#include <sys/wait.h>  // for waitpid
 int child() {
     char *args[3];
     args[0] = "ls";
@@ -29,6 +31,7 @@ int main(void) {
         close(CtoP[1]);
 
         std::cout << "I am in a child process" << std::endl;
+        std::cout << "[C]: start to sleep for 10s" << std::endl;
         sleep(10);
         return child();
     } else if (pid > 0) {
