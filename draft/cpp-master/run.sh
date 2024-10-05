@@ -1,13 +1,13 @@
 ARGUMENT_ENABLE=false
-CLEAR_BUILD_FOLDER=true
+CLEAR_BUILD_FOLDER=false
 SEPARATE_ERR_AND_OUT=true
 
 # FIXME: change this to fit your project
 PATH_TO_CMAKE_SOURCE="./"
 PATH_TO_CMAKE_BUILD="./cmake-build-debug"
 
-if [ ! -d "./${CLEAR_BUILD_FOLDER}" ]; then
-    mkdir ./${CLEAR_BUILD_FOLDER}
+if [ ! -d "./${PATH_TO_CMAKE_BUILD}" ]; then
+    mkdir ./${PATH_TO_CMAKE_BUILD}
 elif ${CLEAR_BUILD_FOLDER}; then
     echo "starting to clear cmake build file"
     printf "\n"
@@ -16,8 +16,8 @@ fi
 
 # build based on mode
 
-if [ $# -ne 1 ]; then
-    printf "only 1 argument is allowed to specify cmake mode\n"
+if [ $# -ne 2 ]; then
+    printf "usage: bash run.sh cmake_mode make_target\n"
     exit 1
 fi
 
@@ -38,7 +38,7 @@ fi
 # make in a directory
 printf "\n"
 printf "starting make\n"
-make -C ${PATH_TO_CMAKE_BUILD}
+make -C ${PATH_TO_CMAKE_BUILD} $2
 
 # test
 # TARGET_NAME="ece650-a2"
