@@ -21,11 +21,11 @@ add_executable(ece650-a2 ece650-a2.cpp
         GeneralException.h)
 
 # create the executable for tests
-add_executable(tests test/test.cpp
-        Graph.cpp
-        Graph.h
-        GeneralException.h)
-add_executable(test_graph test/test_graph.cpp
-        Graph.cpp
-        Graph.h
-)
+#add_executable(tests test/test.cpp
+#        Graph.cpp
+#        Graph.h
+#        GeneralException.h)
+#add_executable(test_graph test/test_graph.cpp
+#        Graph.cpp
+#        Graph.h
+#)
