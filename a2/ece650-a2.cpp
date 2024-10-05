@@ -7,6 +7,7 @@
 #include "GeneralException.h"
 
 #define END_LINE_ENABLE false
+#define IGNORE_COMMENT true
 
 
 enum State {
@@ -35,6 +36,14 @@ int main(int argc, char **argv) {
         if (line.empty()) {
             continue;
         }
+
+#if IGNORE_COMMENT
+        // ignore comment line
+        if (line[0] == '#') {
+            continue;
+        }
+#endif
+
 
         // create an input stream based on the line
         // we will use the input stream to parse the line
