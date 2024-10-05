@@ -1,6 +1,6 @@
 ARGUMENT_ENABLE=false
 CLEAR_BUILD_FOLDER=true
-SEPARATE_ERR_AND_OUT=false
+SEPARATE_ERR_AND_OUT=true
 
 # FIXME: change this to fit your project
 PATH_TO_CMAKE_SOURCE="./"
@@ -55,7 +55,7 @@ else
 fi
 
 # FIXME: change this to fit your test case count
-TEST_CASE_COUNT=10
+TEST_CASE_COUNT=11
 readonly TEST_CASE_COUNT
 
 printf "\n"
