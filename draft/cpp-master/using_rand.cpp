@@ -17,6 +17,10 @@ int main(void) {
   // Have to use read() method for low-level reading
   char ch = 'a';
   urandom.read(&ch, 1);
+  /*
+  std::istream::read
+  istream& read (char* s, streamsize n);
+  */
   // cast to integer to see the numeric value of the character
   std::cout << "Random character: " << (unsigned int)ch << "\n";
 
