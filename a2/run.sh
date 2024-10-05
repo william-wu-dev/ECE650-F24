@@ -1,5 +1,5 @@
 ARGUMENT_ENABLE=false
-CLEAR_BUILD_FOLDER=false
+CLEAR_BUILD_FOLDER=true
 SEPARATE_ERR_AND_OUT=false
 
 # FIXME: change this to fit your project
