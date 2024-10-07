@@ -10,6 +10,7 @@ using namespace std;
 
 int main() 
 { 
+    std::cout << "Line before fork" << std::endl;
     pid_t c_pid = fork(); 
 
     if (c_pid == -1) { 
