@@ -12,10 +12,9 @@ def main():
     # sample code to read from stdin.
     # make sure to remove all spurious print statements as required
     # by the assignment
-    while True:
-        line = sys.stdin.readline()
-        if line == "":
-            break
+    for line in sys.stdin:
+        if line == "" or line[0] == "#" or line == "\n":
+            continue
         # print('READ LINE:', line, file=sys.stdout)
         try:
             # parse command
