@@ -1,7 +1,19 @@
+
+
 # test9.in
+
+
 # marks = 10
 
 add "Amphitheatre Prkw" (2,-1) (2,2) (5,5) (5,6) (3,8)
+
+
 mod "amphitheatre PRKW" (2,8) (4,6) (5,6) (7,8)
+
+# RANDOM COMMENT
+
 add "One Infinite Loop" (2,4) (3,6) (6,6) (8,4)
+
+
+
 gg
