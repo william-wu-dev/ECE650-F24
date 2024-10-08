@@ -41,7 +41,7 @@ printf "starting make\n"
 make -C ${PATH_TO_CMAKE_BUILD} $2
 
 # run target
-"./${PATH_TO_CMAKE_BUILD}/$2"
+# "${PATH_TO_CMAKE_BUILD}/$2"
 
 # test
 # TARGET_NAME="ece650-a2"
