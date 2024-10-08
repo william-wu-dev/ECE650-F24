@@ -1,0 +1,5 @@
+# test3.in
+# marks = 5
+
+add   "up and across st" (0,0) (10,10)
+mod "down and across st" (0,10) (10,0)

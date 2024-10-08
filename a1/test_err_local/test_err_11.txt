@@ -1,0 +1,1 @@
+Error: command `b this is bad input' not valid.

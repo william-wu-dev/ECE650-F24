@@ -1,0 +1,6 @@
+
+# test1.in
+# marks = 5
+
+b this is bad input
+
