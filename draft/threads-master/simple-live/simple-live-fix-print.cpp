@@ -1,8 +1,11 @@
 #include <iostream>
+#include <sstream>
 // #include <pthread.h>
 // #include <stdio.h> // perror is defined in header <stdio.h>
 // #include <sys/types.h>
 #include <unistd.h>
+
+int number = 0;
 
 void *foo(void *data)
 {
@@ -12,12 +15,16 @@ void *foo(void *data)
     int *vals = static_cast<int *>(data);
     for (int i = 0; i < 10000; i++)
     {
+        std::stringstream out;
+
         // *vals++;
         /* Warning, in the above line, *vals will not self increase. Instead, the address that the pointer points at will increase by 1, pointing no where */
         *vals = *vals + 1;
 
-        std::cout << "I am thread " << tid << " of process " << pid << std::endl;
-        std::cout << "\t value= " << *vals << std::endl;
+        out << "I am thread " << tid << " of process " << pid << std::endl;
+        out << "\t value= " << *vals << std::endl;
+
+        std::cout << out.str() << std::flush;
     }
     return nullptr;
 }
@@ -30,12 +37,16 @@ void *bar(void *data)
 
     for (int i = 0; i < 10000; i++)
     {
+        std::stringstream out;
+
         // *vals++;
         /* Warning, in the above line, *vals will not self increase. Instead, the address that the pointer points at will increase by 1, pointing no where */
         *vals = *vals + 1;
 
-        std::cout << "I am also a thread " << tid << " of process " << pid << std::endl;
-        std::cout << "\t value=" << *vals << std::endl;
+        out << "I am also a thread " << tid << " of process " << pid << std::endl;
+        out << "\t value=" << *vals << std::endl;
+
+        std::cout << out.str() << std::flush;
     }
     return nullptr;
 }

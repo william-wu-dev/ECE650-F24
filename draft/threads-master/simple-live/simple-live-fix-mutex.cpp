@@ -1,8 +1,13 @@
 #include <iostream>
-// #include <pthread.h>
+#include <sstream>
+#include <pthread.h>
 // #include <stdio.h> // perror is defined in header <stdio.h>
 // #include <sys/types.h>
 #include <unistd.h>
+
+// int number = 0;
+
+pthread_mutex_t mtx;
 
 void *foo(void *data)
 {
@@ -10,15 +15,22 @@ void *foo(void *data)
     auto tid = pthread_self();
 
     int *vals = static_cast<int *>(data);
+    
+    pthread_mutex_lock(&mtx);
     for (int i = 0; i < 10000; i++)
     {
+        std::stringstream out;
+
         // *vals++;
         /* Warning, in the above line, *vals will not self increase. Instead, the address that the pointer points at will increase by 1, pointing no where */
         *vals = *vals + 1;
 
-        std::cout << "I am thread " << tid << " of process " << pid << std::endl;
-        std::cout << "\t value= " << *vals << std::endl;
+        out << "I am thread " << tid << " of process " << pid << std::endl;
+        out << "\t value= " << *vals << std::endl;
+
+        std::cout << out.str() << std::flush;
     }
+    pthread_mutex_unlock(&mtx);
     return nullptr;
 }
 
@@ -28,29 +40,38 @@ void *bar(void *data)
     auto tid = pthread_self();
     int *vals = static_cast<int *>(data);
 
+    pthread_mutex_lock(&mtx);
     for (int i = 0; i < 10000; i++)
     {
-        // *vals++;
-        /* Warning, in the above line, *vals will not self increase. Instead, the address that the pointer points at will increase by 1, pointing no where */
+        std::stringstream out;
+
         *vals = *vals + 1;
 
-        std::cout << "I am also a thread " << tid << " of process " << pid << std::endl;
-        std::cout << "\t value=" << *vals << std::endl;
+        out << "I am also a thread " << tid << " of process " << pid << std::endl;
+        out << "\t value=" << *vals << std::endl;
+
+        std::cout << out.str() << std::flush;
     }
+    pthread_mutex_unlock(&mtx);
+
     return nullptr;
 }
 
 int main(void)
 {
+    if (pthread_mutex_init(&mtx, nullptr)) {
+        perror("mutex init failed");
+        return 1;
+    }
 
-    int vals = 0;
+    int number = 0;
 
     int ret = 0;
 
     pthread_t t1, t2;
 
     std::cout << "Create and run thread 1: " << std::endl;
-    ret = pthread_create(&t1, nullptr, &foo, &vals);
+    ret = pthread_create(&t1, nullptr, &foo, &number);  // by passing number address to thread, it can now access main thread stack space where number is stored.
     if (ret != 0)
     {
         perror("create thread 1 error");
@@ -59,7 +80,7 @@ int main(void)
     std::cout << "Started thread: " << t1 << std::endl;
 
     std::cout << "Create and run thread 2: " << std::endl;
-    ret = pthread_create(&t2, nullptr, &bar, &vals);
+    ret = pthread_create(&t2, nullptr, &bar, &number);
     if (ret != 0)
     {
         perror("create thread 2 error");
@@ -80,6 +101,8 @@ int main(void)
         perror("join thread 2 error");
         return 1;
     }
+
+    pthread_mutex_destroy(&mtx);
 
     return 0;
 }
