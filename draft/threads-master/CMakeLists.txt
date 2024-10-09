@@ -21,6 +21,7 @@ if (UNIX)
   add_subdirectory(webapp)
   add_subdirectory(checksum)
   add_subdirectory(cpp-live)
+  add_subdirectory(simple-live)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL Linux)
