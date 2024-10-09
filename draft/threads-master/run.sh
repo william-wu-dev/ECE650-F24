@@ -16,8 +16,8 @@ fi
 
 # build based on mode
 
-if [ $# -ne 2 ]; then
-    printf "usage: bash run.sh cmake_mode make_target\n"
+if [ $# -ne 3 ]; then
+    printf "usage: bash run.sh cmake_mode subdirectory_name make_target\n"
     exit 1
 fi
 
@@ -38,10 +38,11 @@ fi
 # make in a directory
 printf "\n"
 printf "starting make\n"
-make -C ${PATH_TO_CMAKE_BUILD} $2
+make -C ${PATH_TO_CMAKE_BUILD} $3
 
 # run target
-# "${PATH_TO_CMAKE_BUILD}/$2"
+cd "${PATH_TO_CMAKE_BUILD}/$2/"
+"./$3"
 
 # test
 # TARGET_NAME="ece650-a2"

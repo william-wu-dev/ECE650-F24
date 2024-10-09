@@ -87,6 +87,9 @@ void *thread_checksum(void *bytes) {
     }
   }
 
+  /*
+  the following is the critical section that is responsible for the error.
+  */
   if (list == NULL) {
     usleep(100000);
     list = malloc(sizeof(struct Node));
