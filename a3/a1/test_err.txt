@@ -1,0 +1,18 @@
+Error: missing street name for `add'.
+Error: double quotation mark should match and ONLY be used to enclose street name.
+Error: coordinates parentheses not match in (4,2) (4,8)).
+Error: nesting parentheses is not allowed in (4,2) ((4,8)).
+Error: missing coordinates for `add'.
+Error: too many arguments for `rm'.
+Error: too many arguments for `gg'.
+Error: there should be more than one coordinate for `add'.
+Error: command `lulu' not valid.
+Error: not-a-integer-number found in coordinate (4, 8a).
+Error: one comma is expected in coordinate (4 8).
+Error: one comma is expected in coordinate (48).
+Error: one comma is expected in coordinate (4, , 8).
+Error: unexpected character between or around coordinates in 2,4 (4,2) (4, 8).
+Error: `add' specified a street with duplicated segment vertices.
+Error: `mod' specified for a street that does not exist.
+Error: `rm' specified for a street that does not exist.
+Error: `add' specified for a street name `weber street' that already exists in the street database.

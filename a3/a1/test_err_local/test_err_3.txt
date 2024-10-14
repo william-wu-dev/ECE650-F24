@@ -1,0 +1,1 @@
+Error: `add' specified for a street name `weber street' that already exists in the street database.

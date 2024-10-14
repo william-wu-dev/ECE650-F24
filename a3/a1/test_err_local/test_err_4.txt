@@ -1,0 +1,8 @@
+Error: missing street name for `add'.
+Error: double quotation mark should match and ONLY be used to enclose street name.
+Error: coordinates parentheses not match in (4,2) (4,8)).
+Error: nesting parentheses is not allowed in (4,2) ((4,8)).
+Error: missing coordinates for `add'.
+Error: too many arguments for `rm'.
+Error: too many arguments for `gg'.
+Error: there should be more than one coordinate for `add'.

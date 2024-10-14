@@ -1,0 +1,27 @@
+add"Weber Street"(2,-1)(2,2)( 5 , 5 )       ( 5 ,6 )( 3 ,8 ) 
+add       "King Street S"       ( 4, 2)          ( 4 ,8 ) 
+add    "Davenport Road"      ( 1, 4)(5, 8 ) 
+gg
+mod "Weber Street" (2,1) (2,2) 
+gg
+rm "KinG StrEEt S" 
+gg
+add "" (4,2) (4,8) 
+add "King Street S (4,2) (4,8) 
+add "King Street S" (4,2) (4,8))
+add "King Street S" (4,2) ((4,8))
+add "King Street S" 
+rm "Davenport Road" (1,4) (5,8) 
+gg "Davenport Road"
+add "King Street S" (4,2)
+lulu "King Street S" (4,2) (4,8) 
+add "King Street S" (4,2) (4, 8a)
+add "King Street S" (4,2) (4 8)
+add "King Street S" (4,2) (48)
+add "King Street S" (4,2) (4, , 8)
+add "King Street S" 2,4 (4,2) (4, 8)
+add "King Street S" (4,2) (4,8) (4, 2)
+mod "King Street S" (4,2) (4,8) 
+rm "King Street S"
+add "Weber Street" (2,-1) (2,2) (5,5)
+gg

@@ -1,0 +1,6 @@
+add "street 1" (1, 1) (4, 1)
+add "street 2" (5, 0) (5, 1)
+add "street 3" (6, 1) (7, 2)
+add "street 4" (6, 2) (3, 2)
+add "street 5" (2, 2) (3, 3)
+gg

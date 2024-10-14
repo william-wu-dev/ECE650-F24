@@ -1,0 +1,6 @@
+# test7.in
+# marks = 20
+
+add "up and across st" (0,0) (10,10)
+add "down and across st" (0,10) (10,0)
+gg
