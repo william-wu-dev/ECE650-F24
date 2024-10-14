@@ -16,10 +16,10 @@ endif()
 
 # create the main executable
 ## add additional .cpp files if needed
-add_executable(ece650-a2 ece650-a2.cpp )
+add_subdirectory(a2)
 add_executable(ece650-a3 ece650-a3.cpp )
 
 # create the executable for tests
 add_executable(tests test.cpp)
-install(PROGRAMS ece650-a1.py DESTINATION bin)
+install(PROGRAMS a1/a1ece650.py a1/line_parser.py a1/StreetDatabase.py a1/graph_generator.py a1/Graph.py DESTINATION bin)
 install(TARGETS ece650-a2 ece650-a3 RUNTIME DESTINATION bin)
