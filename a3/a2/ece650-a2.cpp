@@ -6,7 +6,7 @@
 #include "Graph.h"
 #include "GeneralException.h"
 
-#define END_LINE_ENABLE false
+#define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 
 
@@ -106,6 +106,8 @@ int main(int argc, char **argv) {
                     }
                     // change state
                     state = V_SPECIFIED;
+                    // change state means everything is okay, so we output command
+                    std::cout << line << std::endl;
                     break;
                 }
                 case V_SPECIFIED: {
@@ -311,6 +313,8 @@ int main(int argc, char **argv) {
 
                     // set state to edge specified
                     state = E_SPECIFIED;
+                    // change state means everything is okay, so we output command
+                    std::cout << line << std::endl;
                     break;
                 }
                 case E_SPECIFIED: {
