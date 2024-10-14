@@ -7,7 +7,7 @@ email: y297wu@uwaterloo.ca
 
 class Graph():
     def __init__(self) -> None:
-        self._cnt = 0  # vertex id indicator; indicates the id for new vertex; self-increment;
+        self._cnt = 1  # vertex id indicator; indicates the id for new vertex; self-increment;
         self._vertices = dict()  # <k: vertex coordinate, v: vertex id>
         self._edges = dict()  # <k: smaller vertex id, v: list of vertex id that form a qualified edge with key vertex id>
         # note: this graph is undirected, so <u,v> will be stored once if u-id < v-id
@@ -64,34 +64,22 @@ class Graph():
     def __str__(self) -> str:
         # TODO: finish this print according to the output sample.
         # sort vertices based on the id
-        vertices_sorted = {k: v for k, v in sorted(self._vertices.items(), key= lambda item: item[1])}
         # sort edge based on u_id
         edges_sorted = {k: v for k, v in sorted(self._edges.items(), key=lambda item: item[0])}
         # print vertices first
-        res = 'V = {'
-        for coordinate, id in vertices_sorted.items():
-            res += '\n'
-            res += '  '
-            res += str(id)
-            res += ': '
-            res += f'({coordinate[0]:.2f},{coordinate[1]:.2f})'
-        res += '\n'
-        res += '}'
+        res = f'V {len(self._vertices)}'
 
         res += '\n'
 
         # print edges
-        res += 'E = {'
+        res += 'E {'
         flag = False
         for u_id, v_id_list in edges_sorted.items():
             for v_id in v_id_list:
-                res += '\n'
-                res += '  '
-                res += f'<{u_id},{v_id}>,'
+                if flag:
+                    res += ','
+                res += f'<{u_id},{v_id}>'
                 if not flag:
                     flag = True
-        if flag:
-            res = res[:-1] # get rid of trailing comma if printed
-        res += '\n'
         res += '}'
         return res
