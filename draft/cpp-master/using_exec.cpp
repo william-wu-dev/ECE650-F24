@@ -28,6 +28,7 @@ int main(void) {
     // Clipped from: https://www.ibm.com/docs/en/i/7.3?topic=functions-perror-print-error-message
     // perror() — Print Error Message
     // Defined in header <cstdio>
+    // If string is not NULL and does not point to a null character, the string pointed to by string is printed to the standard error stream, followed by a colon and a space.
     // The message associated with the value in errno is then printed followed by a new-line character.
     std::cerr << "Error Message by strerror: " << strerror(errno) << std::endl;
     // strerror in <cstring> and errno in <cerrno>
