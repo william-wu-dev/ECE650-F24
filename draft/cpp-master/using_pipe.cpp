@@ -13,7 +13,7 @@ int procA(void) {
   // Process A writing to C
   for (int i = 0; i < 100; i++) {
     std::cout << "Hi" << std::endl;
-    usleep(5000);
+    sleep(5);
   }
   std::cout << "[A] Sleeping" << std::endl;
   sleep(6);
