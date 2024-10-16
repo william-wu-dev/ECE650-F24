@@ -1,5 +1,7 @@
 // based on the example from
 // https://stackoverflow.com/questions/13041416/redirect-stdout-of-two-processes-to-another-processs-stdin-in-linux-c
+
+// The key observation is that you only need one pipe. Several processes (with a common parent) can write to a single pipe. However, only one file descriptor can be used as the standard input.
 #include <vector>
 
 #include <iostream>
