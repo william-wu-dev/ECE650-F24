@@ -1,0 +1,123 @@
+#include <iostream>
+#include <unistd.h>
+#include "GeneralException.h"
+
+#define DEBUG true
+
+bool is_positive_integer(const std::string& s) {
+    for (const auto ch : s) {
+        if (!isdigit(ch)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/// main() must be declared with arguments
+/// otherwise command line arguments are ignored
+int main(int argc, char **argv) {
+    // don't really need these flags because all the flags have value, we use value instead.
+    // bool s_flag = false;
+    // bool n_flag = false;
+    // bool l_flag = false;
+    // bool c_flag = false;
+
+    int s_value = 10;  // # of streets \in [2, k], k >= 2, default k = 10
+    int n_value = 5;  // # of line_seg in each street \in [1, k], k >= 1, default k = 5
+    // note that # of seg-point will be n_value + 1
+    int l_value = 5;  // waiting time in seconds \in [5, k], k >= 5, default k = 5
+    int c_value = 20;  // range of coordinates \in [-k, k], coordinates are int, k >= 1, default k = 20
+
+    int opt_read;
+
+    opterr = 0;
+    // If getopt() does not recognize an option character, it prints an error message to stderr, stores the character in
+    // optopt, and returns '?'. The calling program may prevent the error message by setting opterr to 0.
+
+    // Generally, the getopt() function is called from inside of a loop’s conditional statement. The loop terminates
+    // when the getopt() function returns -1. A switch statement is then executed with the value returned by getopt()
+    // function.
+    // expected options are '-s value', '-n value', '-l value' and '-c value'
+    try {
+        while ((opt_read = getopt(argc, argv, ":s:n:l:c:")) != -1) {
+            // ‘-1’ if there are no more options to process.
+            switch (opt_read) {
+                case 's': {
+                    if (!is_positive_integer(optarg) || atoi(optarg) < 2 || atoi(optarg) > INT_MAX) {
+                        std::string msg = "invalid argument for -s received: ";
+                        msg += optarg;
+                        throw a3::GeneralException(msg);
+                    }
+                    s_value = atoi(optarg);
+                    break;
+                }
+                case 'n': {
+                    if (!is_positive_integer(optarg) || atoi(optarg) < 1 || atoi(optarg) > INT_MAX) {
+                        std::string msg = "invalid argument for -n received: ";
+                        msg += optarg;
+                        throw a3::GeneralException(msg);
+                    }
+                    n_value = atoi(optarg);
+                    break;
+                }
+                case 'l': {
+                    if (!is_positive_integer(optarg) || atoi(optarg) < 5 || atoi(optarg) > INT_MAX) {
+                        std::string msg = "invalid argument for -l received: ";
+                        msg += optarg;
+                        throw a3::GeneralException(msg);
+                    }
+                    l_value = atoi(optarg);
+                    break;
+                }
+                case 'c': {
+                    if (!is_positive_integer(optarg) || atoi(optarg) < 1 || atoi(optarg) > INT_MAX) {
+                        std::string msg = "invalid argument for -c received: ";
+                        msg += optarg;
+                        throw a3::GeneralException(msg);
+                    }
+                    c_value = atoi(optarg);
+                    break;
+                }
+                case ':': {
+                    std::string opt_without_arg;
+                    opt_without_arg += static_cast<char>(optopt);
+                    std::string msg = "option -";
+                    msg += opt_without_arg;
+                    msg += " requires an argument";
+                    throw a3::GeneralException(msg);
+                    break;
+                }
+                case '?': {
+                    std::string opt_unknown;
+                    opt_unknown += static_cast<char>(optopt);
+                    std::string msg = "unknown option -";
+                    msg += opt_unknown;
+                    throw a3::GeneralException(msg);
+                    break;
+                }
+            }
+        }
+        // opt that are not parsed
+        if (optind < argc) {
+            std::string msg = "non-optional arguments: ";
+            for (auto i = optind; i < argc; i++) {
+                msg += argv[i];
+                msg += " ";
+            }
+            throw a3::GeneralException(msg);
+        }
+#if DEBUG
+        std::cout << "s_value = " << s_value << std::endl;
+        std::cout << "n_value = " << n_value << std::endl;
+        std::cout << "l_value = " << l_value << std::endl;
+        std::cout << "c_value = " << c_value << std::endl;
+#endif
+    } catch (std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+
+    return 0;
+}
+
+
