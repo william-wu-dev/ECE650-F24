@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <unistd.h>
 #include "GeneralException.h"
@@ -11,6 +12,37 @@ bool is_positive_integer(const std::string& s) {
         }
     }
     return true;
+}
+
+/**
+ * generate random integer in range [min, max]
+ * @param min floor of random integer, inclusive
+ * @param max ceiling of random integer, inclusive
+ * @return random integer range in [min, max]
+ */
+int randint(const int min, const int max) noexcept(false) {
+    // open /dev/urandom to read
+    std::ifstream urandom("/dev/urandom");
+
+    // check that it did not fail
+    if (urandom.fail()) {
+        throw a3::GeneralException("unable to open /dev/urandom");
+    }
+
+    // start reading, unsigned int reading only
+    unsigned int x = 0;
+    urandom.read(reinterpret_cast<char *>(&x), sizeof(unsigned int));
+
+    // calculated in unsigned then transferred to int. after the modulo, it is guaranteed that the result is in the int
+    // range. Unless, b - a + 1 exceed in range. 2147483647
+    const int mid = static_cast<int>(x % static_cast<unsigned int>(max - min + 1));
+
+    const int res = mid + min;
+
+    // close random stream
+    urandom.close();
+
+    return res;
 }
 
 /// main() must be declared with arguments
