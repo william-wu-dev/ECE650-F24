@@ -194,6 +194,54 @@ def intersect (p1: Point, q1: Point, p2: Point, q2: Point):
     return Point ((xcoor, ycoor))
 
 def overlap_intersect(p1: Point, q1: Point, p2: Point, q2: Point):
+    # when x is all equal, we have to use y to judge instead.
+    if p1.x == q1.x and q1.x == p2.x and p2.x == q2.x:
+        if max(p1.y, q1.y) >= max(p2.y, q2.y) and min(p1.y, q1.y) <= min(p2.y, q2.y):
+            # seg 2 in seg 1
+            return [p2, q2]
+        elif max(p2.y, q2.y) > max(p1.y, q1.y) and min(p2.y, q2.y) < min(p1.y, q1.y):
+            # seg 1 in seg 2
+            return [p1, q1]
+        elif max(p2.y, q2.y) > max(p1.y, q1.y) and max(p1.y, q1.y) > min(p2.y, q2.y):
+            # seg 2 and seg 1 overlap
+            res = []
+            if q2.y > p2.y:  # get min in seg 2
+                res.append(p2)
+            else:
+                res.append(q2)
+            if q1.y > p1.y:  # get max in seg 1
+                res.append(q1)
+            else:
+                res.append(p1)
+            return res
+        elif max(p1.y, q1.y) > max(p2.y, q2.y) and max(p2.y, q2.y) > min(p1.y, q1.y):
+            # seg 2 and seg 1 overlap
+            res = []
+            if q1.y > p1.y:  # get min in seg 1
+                res.append(p1)
+            else:
+                res.append(q1)
+            if q2.y > p2.y:  # get max in seg 2
+                res.append(p2)
+            else:
+                res.append(q2)
+            return res
+        elif max(p1.y, q1.y) == min(p2.y, q2.y):
+            # seg 2 and seg 1 intersect on end-point
+            if q1.y > p1.y:  # return the max in seg 1
+                return  [q1]
+            else:
+                return [p1]
+        elif max(p2.y, q2.y) == min(p1.y, q1.y):
+            # seg 2 and seg 1 intersect on end-point
+            if q2.y > p2.y:  # return the max in seg 2
+                return [q2]
+            else:
+                return [p2]
+        else:
+            return []
+    
+    # use x projection to judge only when x is not all equal
     if max(p1.x, q1.x) >= max(p2.x, q2.x) and min(p1.x, q1.x) <= min(p2.x, q2.x):
         # seg 2 in seg 1
         return [p2, q2]
@@ -285,7 +333,13 @@ def check_intersect(p1: Point, q1: Point, p2: Point, q2: Point) -> int:
         return 1
     
     if o_p1_q1_p2 == 0 and o_p1_q1_q2 == 0 and o_p2_q2_p1 == 0 and o_p2_q2_q1 == 0:  # on the same line, need more comparison to determine intersect
-        # compare the projection of x
+        # if x is all equal, compare y
+        if p1.x == q1.x and q1.x == p2.x and p2.x == q2.x:
+            if min(p1.y, q1.y) > max(p2.y, q2.y) or min(p2.y, q2.y) > max(p1.y, q1.y):
+                return -1  # if one segment smaller y is larger than the other segment larger y, then no intersection
+            else:
+                return 0
+        # compare the projection of x, only if x is not all equal
         if min(p1.x, q1.x) > max(p2.x, q2.x) or min(p2.x, q2.x) > max(p1.x, q1.x):
             return -1  # if one segment smaller x is larger than the other segment larger x, then no intersection
         else:

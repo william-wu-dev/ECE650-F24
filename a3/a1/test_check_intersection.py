@@ -92,5 +92,28 @@ class CheckIntersectTest(unittest.TestCase):
         res = check_intersect(p2, q2, p1, q1)
         self.assertEqual(res, 0)
 
+    def test_vertical_overlap(self):
+        p1 = Point((1, 1))
+        q1 = Point((1, 3))
+        p2 = Point((1, 4))
+        q2 = Point((1, 2))
+        res = check_intersect(p1, q1, p2, q2)
+        self.assertEqual(res, 0)
+
+        res = check_intersect(p2, q2, p1, q1)
+        self.assertEqual(res, 0)
+
+    def test_vertical_not_overlap(self):
+        p1 = Point((1, 1))
+        q1 = Point((1, 2))
+        p2 = Point((1, 4))
+        q2 = Point((1, 3))
+        res = check_intersect(p1, q1, p2, q2)
+        self.assertEqual(res, -1)
+
+        res = check_intersect(p2, q2, p1, q1)
+        self.assertEqual(res, -1)
+
+
 if __name__ == '__main__':
     unittest.main()

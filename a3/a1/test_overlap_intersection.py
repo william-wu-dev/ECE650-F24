@@ -47,7 +47,56 @@ class OverlapIntersectionTest(unittest.TestCase):
         self.assertNotIn(p1, res)
         self.assertNotIn(p2, res)
 
+    def test_vertical_overlap(self):
+        p1 = Point((1, 1))
+        q1 = Point((1, 3))
+        p2 = Point((1, 4))
+        q2 = Point((1, 2))
+        res = overlap_intersect(p1, q1, p2, q2)
+        self.assertIn(q1, res)
+        self.assertIn(q2, res)
 
+    def test_vertical_total_overlap(self):
+        p1 = Point((1, 1))
+        q1 = Point((1, 3))
+        p2 = Point((1, 3))
+        q2 = Point((1, 2))
+        res = overlap_intersect(p1, q1, p2, q2)
+        self.assertIn(p2, res)
+        self.assertIn(q2, res)
+        self.assertNotIn(p1, res)
+
+
+        p1 = Point((1, 3))
+        q1 = Point((1, 0))
+        p2 = Point((1, 1))
+        q2 = Point((1, 2))
+        res = overlap_intersect(p1, q1, p2, q2)
+        self.assertIn(p2, res)
+        self.assertIn(q2, res)
+        self.assertNotIn(p1, res)
+        self.assertNotIn(q1, res)
+
+    def test_vertical_partially_overlap(self):
+        p1 = Point((1, 1))
+        q1 = Point((1, 3))
+        p2 = Point((1, 5))
+        q2 = Point((1, 2))
+        res = overlap_intersect(p1, q1, p2, q2)
+        self.assertIn(q1, res)
+        self.assertIn(q2, res)
+        self.assertNotIn(p1, res)
+        self.assertNotIn(p2, res)
+
+    def test_vertical_overlap_only_one_point(self):
+        p1 = Point((1, 1))
+        q1 = Point((1, 3))
+        p2 = Point((1, 4))
+        q2 = Point((1, 3))
+        res = overlap_intersect(p1, q1, p2, q2)
+        self.assertIn(q1, res)
+        self.assertNotIn(p1, res)
+        self.assertNotIn(p2, res)
 
 if __name__ == '__main__':
     unittest.main()
