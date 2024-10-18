@@ -5,7 +5,10 @@
 namespace a3 {
 
 class Point {
-private:
+    friend bool operator==(const Point &lhs, const Point &rhs);
+
+    friend bool operator!=(const Point &lhs, const Point &rhs);
+
     float x;
     float y;
 public:
