@@ -2,11 +2,16 @@
 #include <iostream>
 #include <unistd.h>
 #include "GeneralException.h"
+#include "Street.h"
+#include "Point.h"
+#include <vector>
 
-#define DEBUG true
+#define DEBUG false
 
-bool is_positive_integer(const std::string& s) {
-    for (const auto ch : s) {
+constexpr int ATTEMPT = 25;
+
+bool is_positive_integer(const std::string &s) {
+    for (const auto ch: s) {
         if (!isdigit(ch)) {
             return false;
         }
@@ -54,11 +59,11 @@ int main(int argc, char **argv) {
     // bool l_flag = false;
     // bool c_flag = false;
 
-    int s_value = 10;  // # of streets \in [2, k], k >= 2, default k = 10
-    int n_value = 5;  // # of line_seg in each street \in [1, k], k >= 1, default k = 5
+    int s_value = 10; // # of streets \in [2, k], k >= 2, default k = 10
+    int n_value = 5; // # of line_seg in each street \in [1, k], k >= 1, default k = 5
     // note that # of seg-point will be n_value + 1
-    int l_value = 5;  // waiting time in seconds \in [5, k], k >= 5, default k = 5
-    int c_value = 20;  // range of coordinates \in [-k, k], coordinates are int, k >= 1, default k = 20
+    int l_value = 5; // waiting time in seconds \in [5, k], k >= 5, default k = 5
+    int c_value = 20; // range of coordinates \in [-k, k], coordinates are int, k >= 1, default k = 20
 
     int opt_read;
 
@@ -127,6 +132,10 @@ int main(int argc, char **argv) {
                     throw a3::GeneralException(msg);
                     break;
                 }
+                default: {
+                    throw a3::GeneralException("unknown error");
+                    break;
+                };
             }
         }
         // opt that are not parsed
@@ -144,12 +153,85 @@ int main(int argc, char **argv) {
         std::cout << "l_value = " << l_value << std::endl;
         std::cout << "c_value = " << c_value << std::endl;
 #endif
-    } catch (std::exception& e) {
+    } catch (std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 
+    try {
+        while (true) {
+            // bookkeeping all streets
+            std::vector<a3::Street> streets;
 
-    return 0;
+            // generate segments and command to std out
+            int streets_size = randint(2, s_value);
+            for (int i = 0; i < streets_size; i++) {
+                // generate street
+                a3::Street street;
+                int segment_points_size = randint(1, n_value) + 1;
+                for (int j = 0; j < segment_points_size; j++) {
+                    bool flag = false; // flag for successfully generation
+                    int fail_count = 0; // count failure attempts
+                    while (!flag) {
+                        // generate segment point, note x, y in [-k, k]
+                        int x = randint(-c_value, c_value);
+                        int y = randint(-c_value, c_value);
+                        a3::Point generated_segment_point(x, y);
+                        // test this point validity
+                        try {
+                            // if this street has a line segment, i.e., this is not the first add
+                            if (street.get_segment_points_size() > 0) {
+                                const auto &last_segment_point = street.get_last_point();
+                                // check every other street
+                                for (const auto &other_street: streets) {
+                                    other_street.assert_no_overlap(last_segment_point, generated_segment_point);
+                                }
+                            }
+
+                            // try to add, i.e., check with itself
+                            street.add_segment_point(generated_segment_point);
+
+                            // if no problem at all, this generation is successful
+                            flag = true;
+                        } catch (std::exception &e) {
+                            fail_count += 1;
+#if DEBUG
+                            std::cerr << "Error: " << "failed attempt #" << fail_count << " for " << street.
+                                    get_street_name() << ": " << e.what() << std::endl;
+#endif
+                            if (fail_count >= ATTEMPT) {
+                                std::string message = "failed to generate valid input for ";
+                                message += std::to_string(ATTEMPT);
+                                message += " simultaneous attempts";
+                                throw a3::GeneralException(message);
+                            }
+                        }
+                    }
+                }
+                streets.push_back(street);
+#if DEBUG
+                std::cout << street.issue_add_street() << std::endl;
+#endif
+            }
+
+            // issue add
+            for (const auto &street: streets) {
+                std::cout << street.issue_add_street() << std::endl;
+            }
+
+            // issue gg command
+            std::cout << "gg" << std::endl;
+
+            // sleep random seconds
+            int sleep_time = randint(5, l_value);
+            sleep(sleep_time);
+
+            // issue rm
+            for (const auto &street: streets) {
+                std::cout << street.issue_remove_street() << std::endl;
+            }
+        }
+    } catch (std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return -1;
+    }
 }
-
-
