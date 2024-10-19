@@ -28,6 +28,8 @@ public:
     Point get_last_point() const;
 
     void assert_no_overlap(const Point &start, const Point &end) const;
+
+    size_t get_segment_points_size() const;
 };
 
 } // a3

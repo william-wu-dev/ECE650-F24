@@ -236,4 +236,8 @@ namespace a3 {
             }
         }
     }
+
+    size_t Street::get_segment_points_size() const {
+        return this->segment_points.size();
+    }
 } // a3
