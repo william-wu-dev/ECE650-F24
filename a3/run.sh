@@ -2,7 +2,7 @@ ARGUMENT_ENABLE=false
 CLEAR_BUILD_FOLDER=true
 SEPARATE_ERR_AND_OUT=true
 
-# FIXME: change this to fit your project
+# change this to fit your project
 PATH_TO_CMAKE_SOURCE="./"
 PATH_TO_CMAKE_BUILD="./build"
 
@@ -54,7 +54,7 @@ make install -C ${PATH_TO_CMAKE_BUILD}
 #    rm -rf ./test_err/*
 #fi
 #
-## FIXME: change this to fit your test case count
+## change this to fit your test case count
 #TEST_CASE_COUNT=11
 #readonly TEST_CASE_COUNT
 #
