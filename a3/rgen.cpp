@@ -5,6 +5,7 @@
 #include "Street.h"
 #include "Point.h"
 #include <vector>
+#include <limits.h>
 
 #define DEBUG false
 
@@ -148,10 +149,10 @@ int main(int argc, char **argv) {
             throw a3::GeneralException(msg);
         }
 #if DEBUG
-        std::cout << "s_value = " << s_value << std::endl;
-        std::cout << "n_value = " << n_value << std::endl;
-        std::cout << "l_value = " << l_value << std::endl;
-        std::cout << "c_value = " << c_value << std::endl;
+        std::cerr << "s_value = " << s_value << std::endl;
+        std::cerr << "n_value = " << n_value << std::endl;
+        std::cerr << "l_value = " << l_value << std::endl;
+        std::cerr << "c_value = " << c_value << std::endl;
 #endif
     } catch (std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
@@ -209,7 +210,7 @@ int main(int argc, char **argv) {
                 }
                 streets.push_back(street);
 #if DEBUG
-                std::cout << street.issue_add_street() << std::endl;
+                std::cerr << street.issue_add_street() << std::endl;
 #endif
             }
 
