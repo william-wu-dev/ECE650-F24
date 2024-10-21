@@ -158,6 +158,7 @@ int main(int argc, char **argv) {
 #endif
     } catch (std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
     try {
