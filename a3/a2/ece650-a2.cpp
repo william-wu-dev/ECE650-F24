@@ -384,6 +384,8 @@ int main(int argc, char **argv) {
                         }
                         // change state
                         state = V_SPECIFIED;
+                        // change state means everything is okay, so we output command
+                        std::cout << line << std::endl;
                     } else if (command == 's') {
                         // get from and to, generate the shortest path
 
