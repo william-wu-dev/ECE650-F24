@@ -7,10 +7,10 @@
 #include <vector>
 #include <limits.h>
 
-#define DEBUG true
+#define DEBUG false
 #define ERROR_MESSAGE false
 #define SLEEP false
-#define INTERSECTION true
+#define INTERSECTION false
 
 constexpr int ATTEMPT = 25;
 
