@@ -4,7 +4,7 @@
 #include <vector>
 #include <string.h>
 
-#define DEBUG true
+#define DEBUG false
 #define SLEEP false
 
 /**

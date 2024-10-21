@@ -6,7 +6,7 @@ from line_parser import line_parser
 from StreetDatabase import StreetDatabase
 from graph_generator import graph_generator
 
-DEBUG = True
+DEBUG = False
 
 def main():
     # YOUR MAIN CODE GOES HERE
@@ -35,7 +35,7 @@ def main():
             elif command == 'rm':
                 sdb.rm(street_name)
             elif command == 'gg':
-                # TODO: graph generator. Now we just print database for testing
+                # NOTE: graph generator. Now we just print database for testing
                 # print(str(sdb), file=sys.stdout)
                 graph = graph_generator(sdb)
                 print(str(graph), file=sys.stdout, flush=True)

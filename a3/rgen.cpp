@@ -7,7 +7,7 @@
 #include <vector>
 #include <limits.h>
 
-#define DEBUG true
+#define DEBUG false
 #define ERROR_MESSAGE false
 #define SLEEP false
 

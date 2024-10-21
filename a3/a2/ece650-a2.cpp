@@ -8,8 +8,8 @@
 
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
-#define DEBUG true
-#define ERROR_VERBOSE true
+#define DEBUG false
+#define ERROR_VERBOSE false
 
 
 enum State {
