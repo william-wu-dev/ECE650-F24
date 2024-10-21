@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
             if (!line.empty()) {
                 if (line[0] != '#') {
                     // relay if not comment
-                    std::cout << line << std::endl;
+                    std::cout << line << std::endl << std::flush;
                 }
             }
         }
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
 
 #if GET_PIDS
     for (auto pid : pids) {
-        std::cout << pid << std::endl;
+        std::cerr << pid << std::endl;
     }
 #endif
 

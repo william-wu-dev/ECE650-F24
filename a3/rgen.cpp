@@ -231,14 +231,14 @@ int main(int argc, char **argv) {
 
             // issue add
             for (const auto &street: streets) {
-                std::cout << street.issue_add_street() << std::endl;
+                std::cout << street.issue_add_street() << std::endl << std::flush;
 #if SLEEP
                 sleep(1);
 #endif
             }
 
             // issue gg command
-            std::cout << "gg" << std::endl;
+            std::cout << "gg" << std::endl << std::flush;
 
             // sleep random seconds
             int sleep_time = randint(5, l_value);
@@ -246,7 +246,7 @@ int main(int argc, char **argv) {
 
             // issue rm
             for (const auto &street: streets) {
-                std::cout << street.issue_remove_street() << std::endl;
+                std::cout << street.issue_remove_street() << std::endl << std::flush;
 #if SLEEP
                 sleep(1);
 #endif

@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
                     // change state
                     state = V_SPECIFIED;
                     // change state means everything is okay, so we output command
-                    std::cout << line << std::endl;
+                    std::cout << line << std::endl << std::flush;
                     break;
                 }
                 case V_SPECIFIED: {
@@ -322,7 +322,7 @@ int main(int argc, char **argv) {
                     // set state to edge specified
                     state = E_SPECIFIED;
                     // change state means everything is okay, so we output command
-                    std::cout << line << std::endl;
+                    std::cout << line << std::endl << std::flush;
                     break;
                 }
                 case E_SPECIFIED: {
@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
                         // change state
                         state = V_SPECIFIED;
                         // change state means everything is okay, so we output command
-                        std::cout << line << std::endl;
+                        std::cout << line << std::endl << std::flush;
                     } else if (command == 's') {
                         // get from and to, generate the shortest path
 
@@ -431,7 +431,7 @@ int main(int argc, char **argv) {
                         // generate the shortest graph
                         try {
 #if END_LINE_ENABLE
-                            std::cout << graph.compute(from, to) << std::endl;
+                            std::cout << graph.compute(from, to) << std::endl << std::flush;
 #else
                             std::cout << graph.compute(from, to);
 #endif
