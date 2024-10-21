@@ -3,9 +3,11 @@
 #include <unistd.h>
 #include <vector>
 #include <string.h>
+#include <__filesystem/operations.h>
 
 #define DEBUG false
 #define SLEEP false
+#define GET_PIDS true
 
 /**
  * This is the driver program. Its job is to:
@@ -13,9 +15,8 @@
  *    connect pipes,
  *    run execution (pass arguments to rgen),
  *    print error if anything happens
- * 2. relay input to a2, so this process will eventually become as a relay station.
- * 3. if it sees an eof in the input, kills all other processes with sigterm.
- *    So, I need a bookkeeping of all the processes.
+ * 2. wait one of its child to exit, either rgen or relay station (when it sees an eof)
+ * 3. Kill all child it created
  *
  * Regulation: We do not check error in: pipe, dup2, close
  * @param argc argument count for rgen
@@ -151,30 +152,58 @@ int main(int argc, char **argv) {
     sleep(2);
 #endif
 
-    // this parent process becomes a relay station
-    // connect pipe for relay station
-    dup2(a1_and_driver_to_a2[1], STDOUT_FILENO);
-    close(a1_and_driver_to_a2[0]);
-    close(a1_and_driver_to_a2[1]);
+    // create a relay station
+    const pid_t relay_station_pid = fork();
+    if (relay_station_pid == 0) {
+        // connect pipe for relay station
+        dup2(a1_and_driver_to_a2[1], STDOUT_FILENO);
+        close(a1_and_driver_to_a2[0]);
+        close(a1_and_driver_to_a2[1]);
 
 #if DEBUG
-    std::cerr << "start to relay all input" << std::endl;
+        std::cerr << "start to relay all input" << std::endl;
 #endif
 
-    // begin the relay, until eof
-    while (!std::cin.eof()) {
-        // read a line of input until EOL and store in a string
-        std::string line;
-        std::getline(std::cin, line);
-        if (!line.empty()) {
-            if (line[0] != '#') {
-                // relay if not comment
-                std::cout << line << std::endl;
+        // begin the relay, until eof
+        while (!std::cin.eof()) {
+            // read a line of input until EOL and store in a string
+            std::string line;
+            std::getline(std::cin, line);
+            if (!line.empty()) {
+                if (line[0] != '#') {
+                    // relay if not comment
+                    std::cout << line << std::endl;
+                }
             }
         }
-    }
 
-    // sees eof, sigterm to every other processes
+        // exit immediately when seeing eof
+        return EXIT_SUCCESS;
+    } else if (relay_station_pid < 0) {
+        // creating relay station process ended up in error
+        perror("Error: creating relay station process");
+        return EXIT_FAILURE;
+    } else {
+        // bookkeeping in parent
+        pids.push_back(relay_station_pid);
+    }
+#if SLEEP
+    sleep(2);
+#endif
+
+
+#if GET_PIDS
+    for (auto pid : pids) {
+        std::cout << pid << std::endl;
+    }
+#endif
+
+    // wait for any child to exit
+    // has to be either rgen or relay station
+    int status;
+    waitpid(-1, &status, 0);  // pid == -1, wait for any child exits, quivalent to wait
+
+    // if any child exits, sigterm to every other processes
     for (const auto pid: pids) {
         kill(pid, SIGTERM);
         // kill(pid, SIGKILL);
