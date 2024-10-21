@@ -7,9 +7,10 @@
 #include <vector>
 #include <limits.h>
 
-#define DEBUG false
+#define DEBUG true
 #define ERROR_MESSAGE false
 #define SLEEP false
+#define INTERSECTION true
 
 constexpr int ATTEMPT = 25;
 
@@ -165,6 +166,7 @@ int main(int argc, char **argv) {
         while (true) {
             // bookkeeping all streets
             std::vector<a3::Street> streets;
+            int total_intersections = 0;
 
             // generate segments and command to std out
             int streets_size = randint(2, s_value);
@@ -187,7 +189,8 @@ int main(int argc, char **argv) {
                                 const auto &last_segment_point = street.get_last_point();
                                 // check every other street
                                 for (const auto &other_street: streets) {
-                                    other_street.assert_no_overlap(last_segment_point, generated_segment_point);
+                                    total_intersections += other_street.assert_no_overlap_and_get_intersect_count(
+                                        last_segment_point, generated_segment_point);
                                 }
                             }
 
@@ -215,6 +218,15 @@ int main(int argc, char **argv) {
 #if DEBUG
                 std::cerr << "RGEN: " << street.issue_add_street() << std::endl;
 #endif
+            }
+
+            // must make sure the streets have at least 1 intersection
+#if DEBUG && INTERSECTION
+            std::cerr << "RGEN: total_intersections = " << total_intersections << std::endl;
+#endif
+            if (total_intersections < 1) {
+                // we will do it again, it is very unlikely that we get into infinite loop for that
+                continue;
             }
 
             // issue add

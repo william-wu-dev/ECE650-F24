@@ -213,7 +213,17 @@ namespace a3 {
         return this->segment_points.back();
     }
 
-    void Street::assert_no_overlap(const Point &start, const Point &end) const noexcept(false){
+    /**
+     * This function does two jobs:
+     * 1. (previous design) assert no overlap between: the newly generated line segment AND this street
+     * 2. (added design on oct 21) count intersection of this newly generated line segment AND this street
+     * @param start Point, the start point of a newly generated line segment, which is the segment point previously generated. Use get last point to get it.
+     * @param end Point, the end point of a newly generated line segment, which is the newly generated segment point.
+     * @return the number of intersection of the new line segment and this street.
+     */
+    int Street::assert_no_overlap_and_get_intersect_count(const Point &start, const Point &end) const noexcept(false){
+        int intersect_count = 0;
+
         const auto &p2 = start;
         const auto &q2 = end;
         for (auto i = 0; i < this->segment_points.size() - 1; i++) {
@@ -233,8 +243,12 @@ namespace a3 {
                 message += " from ";
                 message += this->get_street_name();
                 throw GeneralException(message);
+            } else if (res != -1) {  // i.e., res == 1 or res == 2
+                intersect_count += 1;
             }
         }
+
+        return intersect_count;
     }
 
     size_t Street::get_segment_points_size() const {
