@@ -8,6 +8,8 @@
 
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
+#define DEBUG true
+#define ERROR_VERBOSE true
 
 
 enum State {
@@ -37,6 +39,10 @@ int main(int argc, char **argv) {
             continue;
         }
 
+#if DEBUG
+        std::cerr << "A2 Read Line: " << line << std::endl;
+#endif
+
 #if IGNORE_COMMENT
         // ignore comment line
         if (line[0] == '#') {
@@ -64,10 +70,12 @@ int main(int argc, char **argv) {
                     if (command != 'V') {
                         // reset FSM to start over, because VE occurs together
                         state = START;
-                        // std::string message = "expect \'V\' to start a graph specification, but receive: ";
-                        // message += command;
-                        // message += ".";
-                        // throw a2::GeneralException(message);
+#if ERROR_VERBOSE
+                        std::string message = "expect \'V\' to start a graph specification, but receive: ";
+                        message += command;
+                        message += ".";
+                        throw a2::GeneralException(message);
+#endif
                         continue;
                     }
 

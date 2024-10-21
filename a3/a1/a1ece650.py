@@ -6,6 +6,8 @@ from line_parser import line_parser
 from StreetDatabase import StreetDatabase
 from graph_generator import graph_generator
 
+DEBUG = True
+
 def main():
     # YOUR MAIN CODE GOES HERE
     sdb = StreetDatabase()  # instantiate street database
@@ -15,7 +17,12 @@ def main():
     for line in sys.stdin:
         if line == "" or line[0] == "#" or line == "\n":
             continue
-        # print('READ LINE:', line, file=sys.stdout)
+    # while True:
+    #     line = sys.stdin.readline()
+    #     if line == "":
+    #         break
+        if DEBUG:
+            print('A1 READ LINE:', line, file=sys.stderr)
         try:
             # parse command
             command, street_name, coordinates_list = line_parser(line)
@@ -31,7 +38,9 @@ def main():
                 # TODO: graph generator. Now we just print database for testing
                 # print(str(sdb), file=sys.stdout)
                 graph = graph_generator(sdb)
-                print(str(graph), file=sys.stdout)
+                print(str(graph), file=sys.stdout, flush=True)
+                if DEBUG:
+                    print('A1 OUT LINE:', str(graph), file=sys.stderr)
             else:
                 raise Exception(f'unknown command parsed `{command}\'')
         except Exception as e:

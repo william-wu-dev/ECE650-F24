@@ -7,7 +7,9 @@
 #include <vector>
 #include <limits.h>
 
-#define DEBUG false
+#define DEBUG true
+#define ERROR_MESSAGE false
+#define SLEEP false
 
 constexpr int ATTEMPT = 25;
 
@@ -195,7 +197,7 @@ int main(int argc, char **argv) {
                             flag = true;
                         } catch (std::exception &e) {
                             fail_count += 1;
-#if DEBUG
+#if DEBUG && ERROR_MESSAGE
                             std::cerr << "Error: " << "failed attempt #" << fail_count << " for " << street.
                                     get_street_name() << ": " << e.what() << std::endl;
 #endif
@@ -210,13 +212,16 @@ int main(int argc, char **argv) {
                 }
                 streets.push_back(street);
 #if DEBUG
-                std::cerr << street.issue_add_street() << std::endl;
+                std::cerr << "RGEN: " << street.issue_add_street() << std::endl;
 #endif
             }
 
             // issue add
             for (const auto &street: streets) {
                 std::cout << street.issue_add_street() << std::endl;
+#if SLEEP
+                sleep(1);
+#endif
             }
 
             // issue gg command
@@ -229,6 +234,9 @@ int main(int argc, char **argv) {
             // issue rm
             for (const auto &street: streets) {
                 std::cout << street.issue_remove_street() << std::endl;
+#if SLEEP
+                sleep(1);
+#endif
             }
         }
     } catch (std::exception &e) {

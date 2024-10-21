@@ -5,6 +5,7 @@
 #include <string.h>
 
 #define DEBUG true
+#define SLEEP false
 
 /**
  * This is the driver program. Its job is to:
@@ -16,14 +17,12 @@
  * 3. if it sees an eof in the input, kills all other processes with sigterm.
  *    So, I need a bookkeeping of all the processes.
  *
- *    FIXME: it might cause buggy error report if you signal termination
- *
  * Regulation: We do not check error in: pipe, dup2, close
  * @param argc argument count for rgen
  * @param argv argument vector of rgen
  * @return
  */
-int main (int argc, char **argv) {
+int main(int argc, char **argv) {
     // bookkeeping all the processes id
     std::vector<pid_t> pids;
 
@@ -34,6 +33,45 @@ int main (int argc, char **argv) {
     pipe(a1_and_driver_to_a2);
 
     // creating processes
+
+    // create rgen
+    const pid_t rgen_pid = fork();
+    if (rgen_pid == 0) {
+        // connect pipe, because if you exec, everything is gone
+        dup2(rgen_to_a1[1], STDOUT_FILENO);
+        close(rgen_to_a1[0]);
+        close(rgen_to_a1[1]);
+
+        // call rgen
+        char path_to_rgen[100];
+        strcpy(path_to_rgen, "./rgen");
+        char *argv_for_rgen[argc + 1];
+        argv_for_rgen[0] = path_to_rgen;
+        for (int i = 1; i < argc; i++) {
+            argv_for_rgen[i] = argv[i];
+        }
+        argv_for_rgen[argc] = nullptr;
+
+#if DEBUG
+        std::cerr << "start to execv rgen" << std::endl;
+#endif
+        execv(path_to_rgen, argv_for_rgen);
+
+        perror("Error: executing rgen");
+
+        return EXIT_FAILURE;
+    } else if (rgen_pid < 0) {
+        // creating rgen process ended up in error
+        perror("Error: creating rgen process");
+        return EXIT_FAILURE;
+    } else {
+        // bookkeeping in parent
+        pids.push_back(rgen_pid);
+    }
+
+#if SLEEP
+    sleep(2);
+#endif
 
     // create a1
     const pid_t a1_pid = fork();
@@ -60,7 +98,6 @@ int main (int argc, char **argv) {
 
         execv(path_to_a1, argv_for_a1);
 
-        // FIXME: this might lead to problems because we don't know sigterm will set error or not
         perror("Error: executing a1");
 
         return EXIT_FAILURE;
@@ -73,6 +110,9 @@ int main (int argc, char **argv) {
         pids.push_back(a1_pid);
     }
 
+#if SLEEP
+    sleep(2);
+#endif
 
     // create a2
     const pid_t a2_pid = fork();
@@ -95,9 +135,8 @@ int main (int argc, char **argv) {
 
         execv(path_to_a2, argv_for_a2);
 
-        // FIXME: this might lead to problems because we don't know sigterm will set error or not
         perror("Error: executing a2");
-        
+
         return EXIT_FAILURE;
     } else if (a2_pid < 0) {
         // creating a2 process ended up in error
@@ -108,41 +147,9 @@ int main (int argc, char **argv) {
         pids.push_back(a2_pid);
     }
 
-    // create rgen
-    const pid_t rgen_pid = fork();
-    if (rgen_pid == 0) {
-        // connect pipe, because if you exec, everything is gone
-        dup2(rgen_to_a1[1], STDOUT_FILENO);
-        close(rgen_to_a1[0]);
-        close(rgen_to_a1[1]);
-
-        // call rgen
-        char path_to_rgen[100];
-        strcpy(path_to_rgen, "./rgen");
-        char *argv_for_rgen[argc + 1];
-        argv_for_rgen[0] = path_to_rgen;
-        for (int i = 1; i < argc; i++) {
-            argv_for_rgen[i] = argv[i];
-        }
-        argv_for_rgen[argc] = nullptr;
-
-#if DEBUG
-        std::cerr << "start to execv rgen" << std::endl;
+#if SLEEP
+    sleep(2);
 #endif
-        execv(path_to_rgen, argv_for_rgen);
-
-        // FIXME: this might lead to problems because we don't know sigterm will set error or not
-        perror("Error: executing rgen");
-
-        return EXIT_FAILURE;
-    } else if (rgen_pid < 0) {
-        // creating rgen process ended up in error
-        perror("Error: creating rgen process");
-        return EXIT_FAILURE;
-    } else {
-        // bookkeeping in parent
-        pids.push_back(rgen_pid);
-    }
 
     // this parent process becomes a relay station
     // connect pipe for relay station
@@ -151,7 +158,7 @@ int main (int argc, char **argv) {
     close(a1_and_driver_to_a2[1]);
 
 #if DEBUG
-        std::cerr << "start to relay all input" << std::endl;
+    std::cerr << "start to relay all input" << std::endl;
 #endif
 
     // begin the relay, until eof
@@ -168,10 +175,10 @@ int main (int argc, char **argv) {
     }
 
     // sees eof, sigterm to every other processes
-    for (auto pid : pids) {
+    for (const auto pid: pids) {
         kill(pid, SIGTERM);
         // kill(pid, SIGKILL);
     }
-    
+
     return EXIT_SUCCESS;
 }
