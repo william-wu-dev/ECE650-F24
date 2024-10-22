@@ -1,0 +1,173 @@
+Marking #39: StudentInfo(repo='y297wu', first='Yulin', last='Wu', watiam='y297wu', studentid=21130792, email='y297wu@uwaterloo.ca')
+Mark = 0
+
+Running test 0:	 +20
+
+
+--------------
+Running test: tests_a2/test01.in
+
+# test1.in: expect a line of error message, because vertex id go beyond range.
+# marks = 5
+
+V 5
+E {<3,4>,<4,6>}
+s 1 2
+Output:
+----
+Error: vertex 6 of edge <4, 6> is not defined.
+----
+
+Expected result:
+----
+Error: Invalid vertice: 6
+----
+
+Marks: +5	(25 total)
+
+--------------
+Running test: tests_a2/test02.in
+
+# test2.in: expect a line of error message, because no path between the two vertices.
+# marks = 5
+
+V 7
+E {<1,2>,<2,3>,<3,4>,<3,5>}
+s 1 6
+Output:
+----
+Error: 6 is not reachable from 1.
+----
+
+Expected result:
+----
+Error: No path between given vertices!
+----
+
+Marks: +5	(30 total)
+
+--------------
+Running test: tests_a2/test03.in
+
+# test3.in: expect a line of error message, because no path between the two vertices.
+# marks = 5
+
+V 9
+E {<1,2>,<3,4>,<5,6>,<7,8>,<2,4>}
+s 1 8
+Output:
+----
+Error: 8 is not reachable from 1.
+----
+
+Expected result:
+----
+Error: No path between given vertices!
+----
+
+Marks: +5	(35 total)
+
+--------------
+Running test: tests_a2/test04.in
+
+# test4.in: expect a line of error message, because vertex id go beyond range.
+# marks = 5
+
+V 5
+E {<3,4>,<4,6>}
+s 3 5
+Output:
+----
+Error: vertex 6 of edge <4, 6> is not defined.
+----
+
+Expected result:
+----
+Error: Invalid vertice: 6
+----
+
+Marks: +5	(40 total)
+
+--------------
+Running test: tests_a2/test05.in
+
+# test5.in: expect 1-2-3-4-5
+# marks = 15: 
+
+V 5
+E {<1,2>,<3,2>,<4,5>,<3,4>}
+s 1 5
+Output:
+----
+1-2-3-4-5
+----
+
+Expected result:
+----
+1-2-3-4-5
+----
+Comparison result:	NoneNone
+
+Marks: +15	(55 total)
+
+--------------
+Running test: tests_a2/test06.in
+
+# test6.in: expect 1-3-2-5
+# marks = 20:
+
+V 5
+E {<1,3>,<3,2>,<4,5>,<5,2>}
+s 1 5
+Output:
+----
+1-3-2-5
+----
+
+Expected result:
+----
+1-3-2-5
+----
+Comparison result:	NoneNone
+
+Marks: +20	(75 total)
+
+--------------
+Running test: tests_a2/test07.in
+
+# test7.in: expect 1-4-8-11-13
+# marks = 20: 
+
+V 15
+E {<1,2>,<1,5>,<2,5>,<3,5>,<1,4>,<2,3>,<4,8>,<4,6>,<4,9>,<6,7>,<7,8>,<8,9>,<6,9>,<7,9>,<8,11>,<8,10>,<10,11>,<7,10>,<7,11>,<11,13>,<11,12>,<11,14>,<13,14>,<12,14>,<12,13>}
+s 1 13
+Output:
+----
+1-4-8-11-13
+----
+
+Expected result:
+----
+1-4-8-11-13
+----
+Comparison result:	NoneNone
+
+Marks: +20	(95 total)
+
+
+--------------
+
+Finished marking
+Total mark: 95 / 100
+Final mark: 95
+
+           __    ______    ______   ________ 
+         _/  \  /      \  /      \ |        \
+        |   $$ |  $$$$$$\|  $$$$$$\ \$$$$$$$$
+         \$$$$  \$$__| $$ \$$__| $$    /  $$ 
+          | $$   |     $$  |     $$   /  $$  
+          | $$  __\$$$$$\ __\$$$$$\  /  $$   
+         _| $$_|  \__| $$|  \__| $$ /  $$    
+        |   $$ \\$$    $$ \$$    $$|  $$     
+         \$$$$$$ \$$$$$$   \$$$$$$  \$$      
+        
