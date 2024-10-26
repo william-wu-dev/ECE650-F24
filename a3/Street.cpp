@@ -106,7 +106,7 @@ namespace a3 {
         // only check when there are more than 1 segment point, i.e., more than 1 line segment
         if (this->segment_points.size() > 1) {
             // check any other line segment except for the last line segment
-            for (auto i = 0; i < this->segment_points.size() - 2; i++) {
+            for (size_t i = 0; i < this->segment_points.size() - 2; i++) {
                 const auto &p1 = this->segment_points[i];
                 const auto &q1 = this->segment_points[i + 1];
                 const auto &p2 = this->segment_points.back();
@@ -226,7 +226,7 @@ namespace a3 {
 
         const auto &p2 = start;
         const auto &q2 = end;
-        for (auto i = 0; i < this->segment_points.size() - 1; i++) {
+        for (size_t i = 0; i < this->segment_points.size() - 1; i++) {
             const auto &p1 = this->segment_points[i];
             const auto &q1 = this->segment_points[i + 1];
 
