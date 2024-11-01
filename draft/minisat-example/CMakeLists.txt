@@ -24,3 +24,6 @@ include_directories(${CMAKE_SOURCE_DIR}/minisat)
 add_executable(ece650-minisat ece650-minisat.cpp)
 # link minisat library with the main executable
 target_link_libraries(ece650-minisat minisat-lib-static)
+
+add_executable(ece650-minisat-with-vector minisat-example-with-vector.cpp)
+target_link_libraries(ece650-minisat-with-vector minisat-lib-static)
