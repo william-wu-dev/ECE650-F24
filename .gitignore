@@ -45,3 +45,7 @@ Temporary Items
 
 **/cmake-build-*
 **/build
+
+# exclude minisat
+a4/minisat
+draft/minisat-example/minisat
