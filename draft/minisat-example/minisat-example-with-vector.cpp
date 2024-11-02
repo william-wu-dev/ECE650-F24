@@ -10,24 +10,45 @@
 
 // defined std::cout
 #include <iostream>
+#include <vector>
 
 int main(void) {
     // -- allocate on the heap so that we can reset later if needed
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
 
-    Minisat::Lit l1, l2, l3, l4;
+    std::vector<Minisat::Lit> l;
+    l.reserve(4);
+    for (auto i = 0; i < 4; i++) {
+        l.push_back(Minisat::mkLit(solver->newVar()));
+    }
+
 
     // create 4 positive literals over 4 new variables
-    l1 = Minisat::mkLit(solver->newVar());
-    l2 = Minisat::mkLit(solver->newVar());
-    l3 = Minisat::mkLit(solver->newVar());
-    l4 = Minisat::mkLit(solver->newVar());
+    // const auto& l1 = l[0];
+    // const auto& l2 = l[1];
+    // const auto& l3 = l[2];
+    // const auto& l4 = l[3];
+
+    #define l1 l[0]
+    #define l2 l[1]
+    #define l3 l[2]
+    #define l4 l[3]
+
 
     // create 3 positive literals over 3 new variables
-    Minisat::Lit b0, b1, b2;
-    b0 = Minisat::mkLit(solver->newVar());
-    b1 = Minisat::mkLit(solver->newVar());
-    b2 = Minisat::mkLit(solver->newVar());
+    std::vector<Minisat::Lit> b;
+    b.reserve(3);
+    for (auto i = 0; i < 3; i++) {
+        b.push_back(Minisat::mkLit(solver->newVar()));
+    }
+
+    // const auto& b0 = b[0];
+    // const auto& b1 = b[1];
+    // const auto& b2 = b[2];
+
+    #define b0 b[0]
+    #define b1 b[1]
+    #define b2 b[2]
 
     // (l1 || b0)
     Minisat::vec<Minisat::Lit> clause1;
