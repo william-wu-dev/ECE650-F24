@@ -27,3 +27,15 @@ target_link_libraries(ece650-minisat minisat-lib-static)
 
 add_executable(ece650-minisat-with-vector minisat-example-with-vector.cpp)
 target_link_libraries(ece650-minisat-with-vector minisat-lib-static)
+
+add_executable(minisat-using-2d-vector minisat-using-2d-vector.cpp)
+target_link_libraries(minisat-using-2d-vector minisat-lib-static)
+
+add_executable(minisat-test-solver-result minisat-test-solver-result.cpp)
+target_link_libraries(minisat-test-solver-result minisat-lib-static)
+
+
+## add additional .cpp files if needed
+add_executable(ece650-minisat-test-solver-result ece650-minisat-test-solver-result.cpp)
+# link minisat library with the main executable
+target_link_libraries(ece650-minisat-test-solver-result minisat-lib-static)
