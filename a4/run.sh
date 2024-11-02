@@ -50,34 +50,34 @@ printf "starting make\n"
 make -C ${PATH_TO_CMAKE_BUILD}
 
 ## test
-#TARGET_NAME="ece650-a2"
-#
-#if [ ! -d "./test_out" ]; then
-#    mkdir ./test_out
-#else
-#    rm -rf ./test_out/*
-#fi
-#
-#if [ ! -d "./test_err" ]; then
-#    mkdir ./test_err
-#else
-#    rm -rf ./test_err/*
-#fi
-#
-## change this to fit your test case count
-#TEST_CASE_COUNT=11
-#readonly TEST_CASE_COUNT
-#
-#printf "\n"
-#printf "target %s test started, %d test case in total\n" "${TARGET_NAME}" ${TEST_CASE_COUNT}
-#
-#for ((i = 1; i <= TEST_CASE_COUNT; i++)); do
-#    printf "starting test case #%d\n" ${i}
-#    if ${ARGUMENT_ENABLE}; then
-#        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" "./test_in/test_in_${i}.txt" "./test_out/test_out_${i}.txt"
-#    elif ${SEPARATE_ERR_AND_OUT}; then
-#        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" >"./test_out/test_out_${i}.txt" 2>"./test_err/test_err_${i}.txt"
-#    else
-#        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" &>"./test_out/test_out_${i}.txt"
-#    fi
-#done
+TARGET_NAME="ece650-a4"
+
+if [ ! -d "./test_out" ]; then
+    mkdir ./test_out
+else
+    rm -rf ./test_out/*
+fi
+
+if [ ! -d "./test_err" ]; then
+    mkdir ./test_err
+else
+    rm -rf ./test_err/*
+fi
+
+# change this to fit your test case count
+TEST_CASE_COUNT=1
+readonly TEST_CASE_COUNT
+
+printf "\n"
+printf "target %s test started, %d test case in total\n" "${TARGET_NAME}" ${TEST_CASE_COUNT}
+
+for ((i = 1; i <= TEST_CASE_COUNT; i++)); do
+    printf "starting test case #%d\n" ${i}
+    if ${ARGUMENT_ENABLE}; then
+        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" "./test_in/test_in_${i}.txt" "./test_out/test_out_${i}.txt"
+    elif ${SEPARATE_ERR_AND_OUT}; then
+        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" >"./test_out/test_out_${i}.txt" 2>"./test_err/test_err_${i}.txt"
+    else
+        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" &>"./test_out/test_out_${i}.txt"
+    fi
+done
