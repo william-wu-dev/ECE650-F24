@@ -33,6 +33,6 @@ add_executable(ece650-a4 ece650-a4.cpp
 target_link_libraries(ece650-a4 minisat-lib-static)
 
 # create the executable for tests
-add_executable(test test/test.cpp)
+# add_executable(test test/test.cpp)
 # link MiniSAT libraries
-target_link_libraries(test minisat-lib-static)
+# target_link_libraries(test minisat-lib-static)

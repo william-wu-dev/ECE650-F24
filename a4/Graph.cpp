@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <iostream>
 #include <minisat/core/Solver.h>
+#include <memory>
 
 #define DEBUG false
 
