@@ -25,7 +25,7 @@ namespace a4 {
 
         void addEdge(int from, int to, int weight);
 
-        std::string compute();
+        std::string compute() const;
 
         void reset(int vertexCount);
 

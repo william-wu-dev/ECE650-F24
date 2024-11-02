@@ -7,6 +7,7 @@
 
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
+#define DEBUG false
 
 
 enum State {
@@ -310,11 +311,14 @@ int main(int argc, char **argv) {
                         throw a4::GeneralException(message);
                     }
 
-                    // TODO: begin compute here
-#if END_LINE_ENABLE
+#if DEBUG
                     std::cout << graph.toString() << std::endl << std::flush;
+#endif
+
+#if END_LINE_ENABLE
+                    std::cout << graph.compute() << std::endl << std::flush;
 #else
-                    std::cout << graph.toString() << std::flush
+                    std::cout << graph.compute() << std::flush
 #endif
 
                     // set state to edge specified
