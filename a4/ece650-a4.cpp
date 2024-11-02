@@ -65,10 +65,10 @@ int main(int argc, char **argv) {
                     if (command != 'V') {
                         // reset FSM to start over, because VE occurs together
                         state = START;
-                        // std::string message = "expect \'V\' to start a graph specification, but receive: ";
-                        // message += command;
-                        // message += ".";
-                        // throw a4::GeneralException(message);
+                        std::string message = "expect \'V\' to start a graph specification, but receive: ";
+                        message += command;
+                        message += ".";
+                        throw a4::GeneralException(message);
                         continue;
                     }
 
@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
                         } catch (std::exception &e) {
                             // reset FSM to start over, because VE occurs together
                             state = START;
-                            throw; // rethrow the exception to handle the print out
+                            throw; // rethrow the exception to handle the print-out
                         }
 
                         // use the next symbol to determine whether loop should continue or halt
@@ -310,6 +310,13 @@ int main(int argc, char **argv) {
                         throw a4::GeneralException(message);
                     }
 
+                    // TODO: begin compute here
+#if END_LINE_ENABLE
+                    std::cout << graph.toString() << std::endl << std::flush;
+#else
+                    std::cout << graph.toString() << std::flush
+#endif
+
                     // set state to edge specified
                     state = E_SPECIFIED;
                     break;
@@ -326,11 +333,11 @@ int main(int argc, char **argv) {
                         state = E_SPECIFIED;
                         throw a4::GeneralException("Unable to read command.");
                     }
-                    if (command != 'V' && command != 's') {
+                    if (command != 'V') {
                         // reset FSM to start over, because VE occurs together
                         state = E_SPECIFIED;
                         std::string message =
-                                R"(expect 'V' to start a graph specification or 's' to generate shortest path, but receive: )";
+                                R"(expect 'V' to start a graph specification, but receive: )";
                         message += command;
                         message += ".";
                         throw a4::GeneralException(message);
@@ -373,62 +380,6 @@ int main(int argc, char **argv) {
                         }
                         // change state
                         state = V_SPECIFIED;
-                    } else if (command == 's') {
-                        // get from and to, generate the shortest path
-
-                        // get from
-                        int from;
-                        input >> from;
-                        if (input.fail()) {
-                            // reading failed
-                            state = E_SPECIFIED;
-                            std::string message = "unable to read the starting vertex of an edge in command: ";
-                            message += line;
-                            message += ".";
-                            throw a4::GeneralException(message);
-                        }
-
-                        // get to
-                        int to;
-                        input >> to;
-                        if (input.fail()) {
-                            // reading failed
-                            state = E_SPECIFIED;
-                            std::string message = "unable to read the ending vertex of an edge in command: ";
-                            message += line;
-                            message += ".";
-                            throw a4::GeneralException(message);
-                        }
-
-                        // check unexpected following symbol
-                        // NOTE: do not just use eof here, because previous read is just for one character, input only know that
-                        // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
-                        // and input will know that it hits an EOF or not. If hits an EOF, reading would be failed.
-                        char dummy;
-                        input >> dummy;
-                        if (!input.eof()) {
-                            // unexpected symbols following specification
-                            state = E_SPECIFIED;
-                            std::string message = "encounter unexpected argument in command: ";
-                            message += line;
-                            message += ".";
-                            throw a4::GeneralException(message);
-                        }
-
-                        // generate the shortest graph
-                        try {
-#if END_LINE_ENABLE
-                            std::cout << graph.compute(from, to) << std::endl;
-#else
-                            std::cout << graph.compute(from, to);
-#endif
-                        } catch (std::exception &e) {
-                            state = E_SPECIFIED; // exception in s will make the state remain at e specified.
-                            throw; // rethrow the exception
-                        }
-
-                        // change state
-                        state = E_SPECIFIED;
                     } else {
                         state = E_SPECIFIED;
                         throw a4::GeneralException(R"(unexpected error.)");
@@ -438,9 +389,9 @@ int main(int argc, char **argv) {
             }
         } catch (std::exception &e) {
 #if END_LINE_ENABLE
-            std::cerr << "Error: " << e.what() << std::endl;
+            std::cerr << "Error: " << e.what() << std::endl << std::flush;
 #else
-            std::cerr << "Error: " << e.what();
+            std::cerr << "Error: " << e.what() << std::flush;
 #endif
         }
     }
