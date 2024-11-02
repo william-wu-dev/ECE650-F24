@@ -33,6 +33,8 @@ int main(int argc, char **argv) {
 
         // ignore empty line
         if (line.empty()) {
+            // break;
+            // @260: test case will end with an empty line, should terminate
             continue;
         }
 
