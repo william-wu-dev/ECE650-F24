@@ -25,9 +25,11 @@ namespace a4 {
 
         void addEdge(int from, int to, int weight);
 
-        std::string compute(int from, int to);
+        std::string compute();
 
         void reset(int vertexCount);
+
+        std::string toString() const;
     };
 } // a2
 
