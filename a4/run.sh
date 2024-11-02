@@ -65,7 +65,7 @@ else
 fi
 
 # change this to fit your test case count
-TEST_CASE_COUNT=1
+TEST_CASE_COUNT=7
 readonly TEST_CASE_COUNT
 
 printf "\n"
@@ -74,10 +74,10 @@ printf "target %s test started, %d test case in total\n" "${TARGET_NAME}" ${TEST
 for ((i = 1; i <= TEST_CASE_COUNT; i++)); do
     printf "starting test case #%d\n" ${i}
     if ${ARGUMENT_ENABLE}; then
-        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" "./test_in/test_in_${i}.txt" "./test_out/test_out_${i}.txt"
+        time "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" "./test_in/test_in_${i}.txt" "./test_out/test_out_${i}.txt"
     elif ${SEPARATE_ERR_AND_OUT}; then
-        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" >"./test_out/test_out_${i}.txt" 2>"./test_err/test_err_${i}.txt"
+        time "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" >"./test_out/test_out_${i}.txt" 2>"./test_err/test_err_${i}.txt"
     else
-        "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" &>"./test_out/test_out_${i}.txt"
+        time "${PATH_TO_CMAKE_BUILD}/${TARGET_NAME}" <"./test_in/test_in_${i}.txt" &>"./test_out/test_out_${i}.txt"
     fi
 done
