@@ -8,6 +8,7 @@
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 #define DEBUG false
+#define TEST_APPROX_VC_1 false
 
 
 enum State {
@@ -311,14 +312,18 @@ int main(int argc, char **argv) {
                         throw a4::GeneralException(message);
                     }
 
+#if TEST_APPROX_VC_1
+                    std::cerr << graph.ApproxVC1() << std::endl << std::flush;
+#endif
+
 #if DEBUG
-                    std::cout << graph.toString() << std::endl << std::flush;
+                    std::cerr << graph.toString() << std::endl << std::flush;
 #endif
 
 #if END_LINE_ENABLE
                     std::cout << graph.CNFSatVC() << std::endl << std::flush;
 #else
-                    std::cout << graph.compute() << std::flush
+                    std::cout << graph.CNFSatVC() << std::flush
 #endif
 
                     // set state to edge specified
