@@ -10,7 +10,8 @@
 #include <minisat/core/Solver.h>
 #include <memory>
 
-#define DEBUG false
+#define DEBUG_SINGLE false
+#define DEBUG_ITERATION false
 
 namespace a4 {
     Graph::Graph(int vertexCount) : vertexCount(vertexCount) {
@@ -72,7 +73,7 @@ namespace a4 {
         edges.push_back({from, to, weight}); // we only want one direction added.
     }
 
-    std::string Graph::compute() const noexcept(false) {
+    std::string Graph::CNFSatVC() const noexcept(false) {
         if (edges.empty()) {
             const std::string message = "cannot compute vertex cover without edges in graph.";
             throw GeneralException(message);
@@ -84,7 +85,9 @@ namespace a4 {
         // iterate on the size of vertex cover
         for (auto k = 1; k <= vertexCount; k++) {
             // Big Step 1. determine whether this size k is correct
-
+#if DEBUG_ITERATION
+            std::cerr << "Iteration on k: " << k << std::endl;
+#endif
             // declare and bookkeeping all automic propositions
             // x_{i,j} is true iff vertex i of V is the j_{th} vertex in the vertex cover
             // be careful about the indices
@@ -93,11 +96,11 @@ namespace a4 {
                 vertexCount + 1, std::vector<Minisat::Lit>(k + 1, Minisat::lit_Error));
             for (auto i = 1; i <= vertexCount; i++) {
                 for (auto j = 1; j <= k; j++) {
-#if DEBUG
+#if DEBUG_SINGLE
                     std::cerr << "Before: " << atomics[i][j].x << std::endl;
 #endif
                     atomics[i][j] = Minisat::mkLit(solver->newVar());
-#if DEBUG
+#if DEBUG_SINGLE
                     std::cerr << "After: " << atomics[i][j].x << std::endl;
 #endif
                 }
@@ -161,7 +164,7 @@ namespace a4 {
 
             // Big Step 2. if is correct, generate and return result
             if (res) {
-#if DEBUG
+#if DEBUG_SINGLE
                 for (auto j = 1; j <= k; j++) {
                     for (auto i = 1; i <= vertexCount; i++) {
                         // const auto value = Minisat::toInt(solver->modelValue(atomics[i][j]));
@@ -242,5 +245,51 @@ namespace a4 {
         }
         result += "}";
         return result;
+    }
+
+    std::string Graph::ApproxVC1() const {
+        // copy edges first
+        auto copied_edges = this->edges;
+
+        // initialize a result
+        std::vector<int> result;
+
+        // while the copy is not empty
+        while (!copied_edges.empty()) {
+            // compute degree
+            std::vector<int> degrees(vertexCount + 1, 0);
+            for (const auto edge: copied_edges) {
+                degrees[edge.from] += 1;
+                degrees[edge.to] += 1;
+            }
+
+            // pick the vertex with the maximum degree and add to result
+            int maxDegreeVertexIndex = 1;
+            for (int i = 2; i <= vertexCount; i++) {
+                if (degrees[i] > degrees[maxDegreeVertexIndex]) {
+                    maxDegreeVertexIndex = i;
+                }
+            }
+            result.push_back(maxDegreeVertexIndex);
+
+            // erase edges incident on the vertex from copied, iterate backward
+            for (int i = static_cast<int>(copied_edges.size() - 1); i >= 0; i--) {
+                const auto& edge = copied_edges[i];
+                if (edge.from == maxDegreeVertexIndex || edge.to == maxDegreeVertexIndex) {
+                    copied_edges.erase(copied_edges.begin() + i);
+                }
+            }
+        }
+
+        // generate result
+        std::sort(result.begin(), result.end());
+        std::string result_str = "APPROX-VC-1: ";
+        for (size_t i = 0; i < result.size(); i++) {
+            if (i) {
+                result_str += ",";
+            }
+            result_str += std::to_string(result[i]);
+        }
+        return result_str;
     }
 } // a2

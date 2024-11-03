@@ -25,11 +25,13 @@ namespace a4 {
 
         void addEdge(int from, int to, int weight);
 
-        std::string compute() const;
+        std::string CNFSatVC() const;
 
         void reset(int vertexCount);
 
         std::string toString() const;
+
+        std::string ApproxVC1() const;
     };
 } // a2
 

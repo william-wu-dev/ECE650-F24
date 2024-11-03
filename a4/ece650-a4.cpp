@@ -316,7 +316,7 @@ int main(int argc, char **argv) {
 #endif
 
 #if END_LINE_ENABLE
-                    std::cout << graph.compute() << std::endl << std::flush;
+                    std::cout << graph.CNFSatVC() << std::endl << std::flush;
 #else
                     std::cout << graph.compute() << std::flush
 #endif
