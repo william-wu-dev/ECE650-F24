@@ -32,6 +32,8 @@ namespace a4 {
         std::string toString() const;
 
         std::string ApproxVC1() const;
+
+        std::string ApproxVC2() const;
     };
 } // a2
 

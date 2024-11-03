@@ -6,14 +6,55 @@
 #include "GeneralException.h"
 #include <string>
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <minisat/core/Solver.h>
 #include <memory>
 
 #define DEBUG_SINGLE false
 #define DEBUG_ITERATION false
+#define DEBUG_RANDOM false
 
 namespace a4 {
+    /**
+     * generate random integer in range [min, max]
+     * @param min floor of random integer, inclusive
+     * @param max ceiling of random integer, inclusive
+     * @return random integer range in [min, max]
+     */
+    int randint(const int min, const int max) noexcept(false) {
+#if DEBUG_RANDOM
+        std::cerr << "Random number generator using " << min << " to " << max << std::endl;
+#endif
+
+        if (min == max) {
+            return min;
+        }
+
+        // open /dev/urandom to read
+        std::ifstream urandom("/dev/urandom");
+
+        // check that it did not fail
+        if (urandom.fail()) {
+            throw GeneralException("unable to open /dev/urandom");
+        }
+
+        // start reading, unsigned int reading only
+        unsigned int x = 0;
+        urandom.read(reinterpret_cast<char *>(&x), sizeof(unsigned int));
+
+        // calculated in unsigned then transferred to int. after the modulo, it is guaranteed that the result is in the int
+        // range. Unless, b - a + 1 exceed in range. 2147483647
+        const int mid = static_cast<int>(x % static_cast<unsigned int>(max - min + 1));
+
+        const int res = mid + min;
+
+        // close random stream
+        urandom.close();
+
+        return res;
+    }
+
     Graph::Graph(int vertexCount) : vertexCount(vertexCount) {
     }
 
@@ -274,7 +315,7 @@ namespace a4 {
 
             // erase edges incident on the vertex from copied, iterate backward
             for (int i = static_cast<int>(copied_edges.size() - 1); i >= 0; i--) {
-                const auto& edge = copied_edges[i];
+                const auto &edge = copied_edges[i];
                 if (edge.from == maxDegreeVertexIndex || edge.to == maxDegreeVertexIndex) {
                     copied_edges.erase(copied_edges.begin() + i);
                 }
@@ -284,6 +325,49 @@ namespace a4 {
         // generate result
         std::sort(result.begin(), result.end());
         std::string result_str = "APPROX-VC-1: ";
+        for (size_t i = 0; i < result.size(); i++) {
+            if (i) {
+                result_str += ",";
+            }
+            result_str += std::to_string(result[i]);
+        }
+        return result_str;
+    }
+
+    std::string Graph::ApproxVC2() const {
+        // copy edges first
+        auto copied_edges = this->edges;
+
+        // initialize a result
+        std::vector<int> result;
+
+        // while the copy is not empty
+        while (!copied_edges.empty()) {
+            // randomly pick an edge
+            int edgeIndex = randint(0, static_cast<int>(copied_edges.size() - 1));
+#if DEBUG_RANDOM
+            std::cerr << "edgeIndex: " << edgeIndex << std::endl;
+#endif
+            const auto &edgePicked = copied_edges[edgeIndex];
+
+            // add u, v to the result
+            const auto u = edgePicked.from;
+            const auto v = edgePicked.to;
+            result.push_back(u);
+            result.push_back(v);
+
+            // erase edges incident on u, v
+            for (int i = static_cast<int>(copied_edges.size() - 1); i >= 0; i--) {
+                const auto &edge = copied_edges[i];
+                if (edge.from == u || edge.to == u || edge.from == v || edge.to == v) {
+                    copied_edges.erase(copied_edges.begin() + i);
+                }
+            }
+        }
+
+        // generate result
+        std::sort(result.begin(), result.end());
+        std::string result_str = "APPROX-VC-2: ";
         for (size_t i = 0; i < result.size(); i++) {
             if (i) {
                 result_str += ",";

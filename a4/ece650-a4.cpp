@@ -9,6 +9,7 @@
 #define IGNORE_COMMENT true
 #define DEBUG false
 #define TEST_APPROX_VC_1 false
+#define TEST_APPROX_VC_2 false
 
 
 enum State {
@@ -314,6 +315,10 @@ int main(int argc, char **argv) {
 
 #if TEST_APPROX_VC_1
                     std::cerr << graph.ApproxVC1() << std::endl << std::flush;
+#endif
+
+#if TEST_APPROX_VC_2
+                    std::cerr << graph.ApproxVC2() << std::endl << std::flush;
 #endif
 
 #if DEBUG
