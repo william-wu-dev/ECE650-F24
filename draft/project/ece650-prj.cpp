@@ -7,6 +7,7 @@
 #include "Graph.h"
 #include "GeneralException.h"
 #include <csignal>
+#include <cstring>
 
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
@@ -483,8 +484,10 @@ int main(int argc, char **argv) {
                         std::this_thread::sleep_for(std::chrono::seconds(SLEEP_TIME));
                         // we will cancel the thread if it's still there
                         pthread_cancel(CNFSatVCThread);
-                        // assign running time
-                        *CNFSatVCRT = SLEEP_TIME * 1000 + 200;
+                        // assign running time only when the time has not be computed yet
+                        if (*CNFSatVCRT < 0) {
+                            *CNFSatVCRT = SLEEP_TIME * 1000 + 200;
+                        }
                     }
 
                     // collect produced result
