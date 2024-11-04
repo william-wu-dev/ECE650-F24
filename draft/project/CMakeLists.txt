@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-project(ece650-a4)
+project(ece650-prj)
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/minisat")
     add_subdirectory(minisat)
@@ -7,7 +7,7 @@ else ()
     message(FATAL_ERROR "MiniSat not found. Use `git clone https://git.uwaterloo.ca/ece650-f23/minisat.git` to check it out.")
 endif ()
 
-
+find_package (Threads)
 ## ECE650 Specific configuration start here
 ## Project specific configurations go here
 
@@ -30,7 +30,7 @@ add_executable(ece650-prj ece650-prj.cpp
         GeneralException.h
 )
 # link MiniSAT libraries
-target_link_libraries(ece650-prj minisat-lib-static)
+target_link_libraries(ece650-prj minisat-lib-static ${CMAKE_THREAD_LIBS_INIT})
 
 # create the executable for tests
 # add_executable(test test/test.cpp)

@@ -114,7 +114,7 @@ namespace project {
         edges.push_back({from, to, weight}); // we only want one direction added.
     }
 
-    std::string Graph::CNFSatVC() const noexcept(false) {
+    std::vector<int> Graph::CNFSatVC() const noexcept(false) {
         if (edges.empty()) {
             const std::string message = "cannot compute vertex cover without edges in graph.";
             throw GeneralException(message);
@@ -232,16 +232,8 @@ namespace project {
                 }
                 // sort result
                 std::sort(result.begin(), result.end());
-                // convert result to string
-                std::string result_str;
-                for (size_t ii = 0; ii < result.size(); ii++) {
-                    if (ii) {
-                        result_str += " ";
-                    }
-                    result_str += std::to_string(result[ii]);
-                }
                 // return result
-                return result_str;
+                return result;
             } else {
                 // Big Step 2.1 else, reset solver and iterate on the next size
                 // reset the solver each time after we change the size of vertex cover.
@@ -288,7 +280,7 @@ namespace project {
         return result;
     }
 
-    std::string Graph::ApproxVC1() const {
+    std::vector<int> Graph::ApproxVC1() const {
         // copy edges first
         auto copied_edges = this->edges;
 
@@ -324,17 +316,10 @@ namespace project {
 
         // generate result
         std::sort(result.begin(), result.end());
-        std::string result_str = "APPROX-VC-1: ";
-        for (size_t i = 0; i < result.size(); i++) {
-            if (i) {
-                result_str += ",";
-            }
-            result_str += std::to_string(result[i]);
-        }
-        return result_str;
+        return result;
     }
 
-    std::string Graph::ApproxVC2() const {
+    std::vector<int> Graph::ApproxVC2() const {
         // copy edges first
         auto copied_edges = this->edges;
 
@@ -367,13 +352,6 @@ namespace project {
 
         // generate result
         std::sort(result.begin(), result.end());
-        std::string result_str = "APPROX-VC-2: ";
-        for (size_t i = 0; i < result.size(); i++) {
-            if (i) {
-                result_str += ",";
-            }
-            result_str += std::to_string(result[i]);
-        }
-        return result_str;
+        return result;
     }
 } // a2

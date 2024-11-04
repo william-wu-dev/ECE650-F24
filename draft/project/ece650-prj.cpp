@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <thread>
+#include <unistd.h>
 #include <vector>
 #include "Graph.h"
 #include "GeneralException.h"
@@ -8,8 +10,7 @@
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 #define DEBUG false
-#define TEST_APPROX_VC_1 false
-#define TEST_APPROX_VC_2 false
+#define WAIT_FOR_APPROX true
 
 
 enum State {
@@ -24,6 +25,68 @@ const char GT = '>';
 const char LB = '{';
 const char RB = '}';
 
+const int SLEEP_TIME = 2;
+
+/**
+ * data structure for threads
+ */
+struct Data {
+    Data(project::Graph *graph, std::vector<int> *result)
+        : graph(graph),
+          result(result) {
+    }
+
+    project::Graph *graph;
+    std::vector<int> *result;
+
+    Data() = default;
+};
+
+/**
+ * thread that runs CNF-SAT-VC job
+ * @param _data IO data for this thread job
+ * @return N/A
+ */
+void *CNFSatVCRun(void *_data) {
+    // convert data
+    const auto data = static_cast<Data *>(_data);
+
+    // compute CNF-SAT-VC
+    *data->result = data->graph->CNFSatVC();
+
+    return nullptr;
+}
+
+/**
+ * thread that runs APPROX-VC-1 job
+ * @param _data IO data for this thread job
+ * @return N/A
+ */
+void *ApproxVC1Run(void *_data) {
+    // convert data
+    const auto data = static_cast<Data *>(_data);
+
+    // compute ApproxVC1
+    *data->result = data->graph->ApproxVC1();
+
+    return nullptr;
+}
+
+/**
+ * thread that runs APPROX-VC-2 job
+ * @param _data IO data for this thread job
+ * @return N/A
+ */
+void *ApproxVC2Run(void *_data) {
+    // convert data
+    const auto data = static_cast<Data *>(_data);
+
+    // compute ApproxVC1
+    *data->result = data->graph->ApproxVC2();
+
+    return nullptr;
+}
+
 /**
  * This is the main thread, it deals with IO and creates three other threads for solving the VC problem
  * @param argc Not required
@@ -33,8 +96,14 @@ const char RB = '}';
 int main(int argc, char **argv) {
     // initialize Finite State Machine
     auto state = START;
+
     // allocate the graph on heap so that threads can share this graph
     std::unique_ptr<project::Graph> graph(new project::Graph(0));
+    // allocate output vector so that the main thread can obtain results
+    std::unique_ptr<std::vector<int> > CNFSatVCResult(new std::vector<int>());
+    std::unique_ptr<std::vector<int> > ApproxVC1Result(new std::vector<int>());
+    std::unique_ptr<std::vector<int> > ApproxVC2Result(new std::vector<int>());
+
     // read from stdin until EOF
     while (!std::cin.eof()) {
         // read a line of input until EOL and store in a string
@@ -161,7 +230,8 @@ int main(int argc, char **argv) {
                     // use flag to control the edge parsing process
                     bool flag;
                     // since graph without an edge is acceptable, we need to check whether there is edge in this command or not
-                    if (input.peek() == 125) {  // we found a right brace after left brace; it means there's no edge.
+                    if (input.peek() == 125) {
+                        // we found a right brace after left brace; it means there's no edge.
                         char right_brace;
                         input >> right_brace;
                         flag = false;
@@ -320,23 +390,123 @@ int main(int argc, char **argv) {
                         throw project::GeneralException(message);
                     }
 
-#if TEST_APPROX_VC_1
-                    std::cerr << graph->ApproxVC1() << std::endl << std::flush;
+                    // initialize output vector
+                    CNFSatVCResult->clear();
+                    ApproxVC1Result->clear();
+                    ApproxVC2Result->clear();
+
+                    // prepare data for each thread
+                    Data CNFSatVCData((graph.get()), (CNFSatVCResult.get()));
+                    Data ApproxVC1Data((graph.get()), (ApproxVC1Result.get()));
+                    Data ApproxVC2Data((graph.get()), (ApproxVC2Result.get()));
+
+                    // creat thread
+                    pthread_t CNFSatVCThread;
+                    pthread_create(&CNFSatVCThread, nullptr, &CNFSatVCRun, &CNFSatVCData);
+                    pthread_t ApproxVC1Thread;
+                    pthread_create(&ApproxVC1Thread, nullptr, &ApproxVC1Run, &ApproxVC1Data);
+                    pthread_t ApproxVC2Thread;
+                    pthread_create(&ApproxVC2Thread, nullptr, &ApproxVC2Run, &ApproxVC2Data);
+
+                    // wait for a moment
+                    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+#if WAIT_FOR_APPROX
+                    // makesure we will get the result from approx
+                    pthread_join(ApproxVC1Thread, nullptr);
+                    pthread_join(ApproxVC2Thread, nullptr);
 #endif
 
-#if TEST_APPROX_VC_2
-                    std::cerr << graph->ApproxVC2() << std::endl << std::flush;
+                    // see if it's still there or kill everyone
+                    if (!pthread_kill(CNFSatVCThread, 0)) {
+                        // signal 0 means send no signal, just check
+                        // returns 0 means the thread is still there, otherwise the thread is gone
+                        // wait for CNF a little bit more
+                        std::this_thread::sleep_for(std::chrono::seconds(SLEEP_TIME));
+                        // we will cancel the thread if it's still there
+                        pthread_cancel(CNFSatVCThread);
+                    }
+#if !WAIT_FOR_APPROX
+                    if (!pthread_kill(ApproxVC1Thread, 0)) {
+                        // signal 0 means send no signal, just check
+                        // returns 0 means the thread is still there, otherwise the thread is gone
+                        // we will cancel the thread if it's still there
+                        auto status = pthread_cancel(ApproxVC1Thread);
+                        if (status != 0) {
+                            // cancel that thread ended in error
+                            perror("Error");
+                        }
+                    }
+                    if (!pthread_kill(ApproxVC2Thread, 0)) {
+                        // signal 0 means send no signal, just check
+                        // returns 0 means the thread is still there, otherwise the thread is gone
+                        // we will cancel the thread if it's still there
+                        auto status = pthread_cancel(ApproxVC2Thread);
+                        if (status != 0) {
+                            // cancel that thread ended in error
+                            perror("Error");
+                        }
+                    }
 #endif
+
+                    // collect produced result
+                    // collect vertex cover result and output
+                    std::string result_str;
+
+                    // generate result string CNF-SAT-VC
+                    result_str += "CNF-SAT-VC: ";
+                    if (CNFSatVCResult->empty()) {
+                        // killed by timeout
+                        result_str += "timeout";
+                    } else {
+                        for (size_t i = 0; i < CNFSatVCResult->size(); i++) {
+                            if (i) {
+                                result_str += ",";
+                            }
+                            result_str += std::to_string(CNFSatVCResult->at(i));
+                        }
+                    }
+                    result_str += "\n";
+
+                    // generate result string APPROX-VC-1
+                    result_str += "APPROX-VC-1: ";
+                    if (ApproxVC1Result->empty()) {
+                        // killed by timeout
+                        result_str += "timeout";
+                    } else {
+                        for (size_t i = 0; i < ApproxVC1Result->size(); i++) {
+                            if (i) {
+                                result_str += ",";
+                            }
+                            result_str += std::to_string(ApproxVC1Result->at(i));
+                        }
+                    }
+                    result_str += "\n";
+
+                    // generate result string APPROX-VC-2
+                    result_str += "APPROX-VC-2: ";
+                    if (ApproxVC2Result->empty()) {
+                        // killed by timeout
+                        result_str += "timeout";
+                    } else {
+                        for (size_t i = 0; i < ApproxVC2Result->size(); i++) {
+                            if (i) {
+                                result_str += ",";
+                            }
+                            result_str += std::to_string(ApproxVC2Result->at(i));
+                        }
+                    }
+#if END_LINE_ENABLE
+                    result_str += "\n";
+#endif
+                    std::cout << result_str <<std::flush;
+
+                    // TODO:collect analysis result
 
 #if DEBUG
                     std::cerr << graph->toString() << std::endl << std::flush;
 #endif
 
-#if END_LINE_ENABLE
-                    std::cout << graph->CNFSatVC() << std::endl << std::flush;
-#else
-                    std::cout << graph->CNFSatVC() << std::flush
-#endif
 
                     // set state to edge specified
                     state = E_SPECIFIED;
@@ -418,4 +588,3 @@ int main(int argc, char **argv) {
     }
     return 0;
 }
-

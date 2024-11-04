@@ -25,15 +25,16 @@ namespace project {
 
         void addEdge(int from, int to, int weight);
 
-        std::string CNFSatVC() const;
 
         void reset(int vertexCount);
 
         std::string toString() const;
 
-        std::string ApproxVC1() const;
+        std::vector<int> CNFSatVC() const;
 
-        std::string ApproxVC2() const;
+        std::vector<int> ApproxVC1() const;
+
+        std::vector<int> ApproxVC2() const;
     };
 } // a2
 
