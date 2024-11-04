@@ -11,7 +11,6 @@
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 #define DEBUG false
-#define WAIT_FOR_APPROX true
 #define ANALYSIS true
 
 
@@ -33,13 +32,16 @@ const int SLEEP_TIME = 2;
  * data structure for threads
  */
 struct Data {
-    Data(project::Graph *graph, std::vector<int> *result)
+    Data(project::Graph *graph, std::vector<int> *result, double *running_time)
         : graph(graph),
-          result(result) {
+          result(result),
+          running_time(running_time) {
     }
+
 
     project::Graph *graph;
     std::vector<int> *result;
+    double *running_time;
 
     Data() = default;
 };
@@ -56,6 +58,22 @@ void *CNFSatVCRun(void *_data) {
     // compute CNF-SAT-VC
     *data->result = data->graph->CNFSatVC();
 
+    // compute cpu time
+    clockid_t cid;
+    const int ret = pthread_getcpuclockid(pthread_self(), &cid);
+    if (ret) {
+        printf("CNF-SAT-VC thread: pthread_getcpuclockid() returned error: %s\n", strerror(ret));
+        fflush(stdout);
+    } else {
+        // extract timespec out of cid
+        struct timespec ts;
+        if (clock_gettime(cid, &ts) == -1) {
+            printf("CNF-SAT-VC thread: clock_gettime() returned error: %s\n", strerror(ret));
+        }
+        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
+        *data->running_time = ms_time;
+    }
+
     return nullptr;
 }
 
@@ -71,6 +89,22 @@ void *ApproxVC1Run(void *_data) {
     // compute ApproxVC1
     *data->result = data->graph->ApproxVC1();
 
+    // compute cpu time
+    clockid_t cid;
+    const int ret = pthread_getcpuclockid(pthread_self(), &cid);
+    if (ret) {
+        printf("APPROX-VC-1 thread: pthread_getcpuclockid() returned error: %s\n", strerror(ret));
+        fflush(stdout);
+    } else {
+        // extract timespec out of cid
+        struct timespec ts;
+        if (clock_gettime(cid, &ts) == -1) {
+            printf("APPROX-VC-1 thread: clock_gettime() returned error: %s\n", strerror(ret));
+        }
+        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
+        *data->running_time = ms_time;
+    }
+
     return nullptr;
 }
 
@@ -83,8 +117,24 @@ void *ApproxVC2Run(void *_data) {
     // convert data
     const auto data = static_cast<Data *>(_data);
 
-    // compute ApproxVC1
+    // compute ApproxVC2
     *data->result = data->graph->ApproxVC2();
+
+    // compute cpu time
+    clockid_t cid;
+    const int ret = pthread_getcpuclockid(pthread_self(), &cid);
+    if (ret) {
+        printf("APPROX-VC-2 thread: pthread_getcpuclockid() returned error: %s\n", strerror(ret));
+        fflush(stdout);
+    } else {
+        // extract timespec out of cid
+        struct timespec ts;
+        if (clock_gettime(cid, &ts) == -1) {
+            printf("APPROX-VC-2 thread: clock_gettime() returned error: %s\n", strerror(ret));
+        }
+        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
+        *data->running_time = ms_time;
+    }
 
     return nullptr;
 }
@@ -105,6 +155,10 @@ int main(int argc, char **argv) {
     std::unique_ptr<std::vector<int> > CNFSatVCResult(new std::vector<int>());
     std::unique_ptr<std::vector<int> > ApproxVC1Result(new std::vector<int>());
     std::unique_ptr<std::vector<int> > ApproxVC2Result(new std::vector<int>());
+    // allocate running time information
+    std::unique_ptr<double> CNFSatVCRT(new double());
+    std::unique_ptr<double> ApproxVC1RT(new double());
+    std::unique_ptr<double> ApproxVC2RT(new double());
 
     // read from stdin until EOF
     while (!std::cin.eof()) {
@@ -392,15 +446,18 @@ int main(int argc, char **argv) {
                         throw project::GeneralException(message);
                     }
 
-                    // initialize output vector
+                    // initialize output vector and running time
                     CNFSatVCResult->clear();
                     ApproxVC1Result->clear();
                     ApproxVC2Result->clear();
+                    *CNFSatVCRT = -1;
+                    *ApproxVC1RT = -1;
+                    *ApproxVC2RT = -1;
 
                     // prepare data for each thread
-                    Data CNFSatVCData((graph.get()), (CNFSatVCResult.get()));
-                    Data ApproxVC1Data((graph.get()), (ApproxVC1Result.get()));
-                    Data ApproxVC2Data((graph.get()), (ApproxVC2Result.get()));
+                    Data CNFSatVCData((graph.get()), (CNFSatVCResult.get()), (CNFSatVCRT.get()));
+                    Data ApproxVC1Data((graph.get()), (ApproxVC1Result.get()), (ApproxVC1RT.get()));
+                    Data ApproxVC2Data((graph.get()), (ApproxVC2Result.get()), (ApproxVC2RT.get()));
 
                     // creat thread
                     pthread_t CNFSatVCThread;
@@ -413,11 +470,10 @@ int main(int argc, char **argv) {
                     // wait for a moment
                     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-#if WAIT_FOR_APPROX
                     // makesure we will get the result from approx
                     pthread_join(ApproxVC1Thread, nullptr);
                     pthread_join(ApproxVC2Thread, nullptr);
-#endif
+
 
                     // see if it's still there or kill everyone
                     if (!pthread_kill(CNFSatVCThread, 0)) {
@@ -427,29 +483,9 @@ int main(int argc, char **argv) {
                         std::this_thread::sleep_for(std::chrono::seconds(SLEEP_TIME));
                         // we will cancel the thread if it's still there
                         pthread_cancel(CNFSatVCThread);
+                        // assign running time
+                        *CNFSatVCRT = SLEEP_TIME * 1000 + 200;
                     }
-#if !WAIT_FOR_APPROX
-                    if (!pthread_kill(ApproxVC1Thread, 0)) {
-                        // signal 0 means send no signal, just check
-                        // returns 0 means the thread is still there, otherwise the thread is gone
-                        // we will cancel the thread if it's still there
-                        auto status = pthread_cancel(ApproxVC1Thread);
-                        if (status != 0) {
-                            // cancel that thread ended in error
-                            perror("Error");
-                        }
-                    }
-                    if (!pthread_kill(ApproxVC2Thread, 0)) {
-                        // signal 0 means send no signal, just check
-                        // returns 0 means the thread is still there, otherwise the thread is gone
-                        // we will cancel the thread if it's still there
-                        auto status = pthread_cancel(ApproxVC2Thread);
-                        if (status != 0) {
-                            // cancel that thread ended in error
-                            perror("Error");
-                        }
-                    }
-#endif
 
                     // collect produced result
                     // collect vertex cover result and output
@@ -501,50 +537,19 @@ int main(int argc, char **argv) {
 #if END_LINE_ENABLE
                     result_str += "\n";
 #endif
-                    std::cout << result_str <<std::flush;
+                    std::cout << result_str << std::flush;
 
                     // TODO:collect analysis result
                     // TODO: WE WILL FIRST USE MS AS UNIT OF TIME
 #if ANALYSIS
                     std::string analysis_str;
-                    clockid_t CNFSatVCClockID, ApproxVC1ClockID, ApproxVC2ClockID;
-                    if (pthread_getcpuclockid(CNFSatVCThread, &CNFSatVCClockID)) {
-                        perror("Error");
-                    } else {
-                        // extract timespec out of cid
-                        struct timespec ts{};
-                        if (clock_gettime(CNFSatVCClockID, &ts)) {
-                            perror("Error");
-                        }
-                        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
-                        analysis_str += std::to_string(ms_time);
-                    }
+                    analysis_str += std::to_string(*CNFSatVCRT);
                     analysis_str += ",";
 
-                    if (pthread_getcpuclockid(ApproxVC1Thread, &ApproxVC1ClockID)) {
-                        perror("Error");
-                    } else {
-                        // extract timespec out of cid
-                        struct timespec ts{};
-                        if (clock_gettime(ApproxVC1ClockID, &ts)) {
-                            perror("Error");
-                        }
-                        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
-                        analysis_str += std::to_string(ms_time);
-                    }
+                    analysis_str += std::to_string(*ApproxVC1RT);
                     analysis_str += ",";
 
-                    if (pthread_getcpuclockid(ApproxVC2Thread, &ApproxVC2ClockID)) {
-                        perror("Error");
-                    } else {
-                        // extract timespec out of cid
-                        struct timespec ts{};
-                        if (clock_gettime(ApproxVC2ClockID, &ts)) {
-                            perror("Error");
-                        }
-                        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
-                        analysis_str += std::to_string(ms_time);
-                    }
+                    analysis_str += std::to_string(*ApproxVC2RT);
                     analysis_str += ",";
 
                     analysis_str += std::to_string(CNFSatVCResult->size());
