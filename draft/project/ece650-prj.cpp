@@ -6,6 +6,7 @@
 #include <vector>
 #include "Graph.h"
 #include "GeneralException.h"
+#include <signal.h>
 
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
