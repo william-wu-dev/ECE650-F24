@@ -20,7 +20,9 @@
 void *p(void *arg) {
   printf("Thread %u up and running.\n", pthread_self());
   fflush(stdout);
-  thr_sleep(1, 0);
+  // thr_sleep(1, 0);
+  sleep(10); //Suspends thread execution for a specified number of seconds.
+  // https://www.ibm.com/docs/en/zos/2.4.0?topic=functions-sleep-suspend-execution-thread
   printf("Thread %u exiting.\n", pthread_self());
   fflush(stdout);
 }
@@ -31,7 +33,8 @@ int main() {
 
   pthread_create(&t, NULL, &p, (void *)NULL);
 
-  thr_sleep(0, 500000000);
+  // thr_sleep(0, 500000000);
+  sleep(1);
 
   if (ret = pthread_kill(t, 0)) {
     printf("main thread: kill() 1 returned error: %s\n", strerror(ret));
@@ -41,7 +44,8 @@ int main() {
     fflush(stdout);
   }
 
-  thr_sleep(0, 250000000);
+  // thr_sleep(0, 250000000);
+  sleep(2);
 
   if (ret = pthread_kill(t, 0)) {
     printf("main thread: kill() 2 returned error: %s\n", strerror(ret));
