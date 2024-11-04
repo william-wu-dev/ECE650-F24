@@ -33,7 +33,8 @@ const char RB = '}';
 int main(int argc, char **argv) {
     // initialize Finite State Machine
     auto state = START;
-    auto graph = project::Graph(0); // initialize an empty graph
+    // allocate the graph on heap so that threads can share this graph
+    std::unique_ptr<project::Graph> graph(new project::Graph(0));
     // read from stdin until EOF
     while (!std::cin.eof()) {
         // read a line of input until EOL and store in a string
@@ -109,7 +110,7 @@ int main(int argc, char **argv) {
                     }
                     // if all checked, set graph
                     try {
-                        graph.reset(vertexCount);
+                        graph->reset(vertexCount);
                     } catch (std::exception &e) {
                         state = START;
                         throw; // rethrow the exception.
@@ -263,7 +264,7 @@ int main(int argc, char **argv) {
 
                         // complete reading an edge, add it
                         try {
-                            graph.addEdge(from, to, 1);
+                            graph->addEdge(from, to, 1);
                         } catch (std::exception &e) {
                             // reset FSM to start over, because VE occurs together
                             state = START;
@@ -320,21 +321,21 @@ int main(int argc, char **argv) {
                     }
 
 #if TEST_APPROX_VC_1
-                    std::cerr << graph.ApproxVC1() << std::endl << std::flush;
+                    std::cerr << graph->ApproxVC1() << std::endl << std::flush;
 #endif
 
 #if TEST_APPROX_VC_2
-                    std::cerr << graph.ApproxVC2() << std::endl << std::flush;
+                    std::cerr << graph->ApproxVC2() << std::endl << std::flush;
 #endif
 
 #if DEBUG
-                    std::cerr << graph.toString() << std::endl << std::flush;
+                    std::cerr << graph->toString() << std::endl << std::flush;
 #endif
 
 #if END_LINE_ENABLE
-                    std::cout << graph.CNFSatVC() << std::endl << std::flush;
+                    std::cout << graph->CNFSatVC() << std::endl << std::flush;
 #else
-                    std::cout << graph.CNFSatVC() << std::flush
+                    std::cout << graph->CNFSatVC() << std::flush
 #endif
 
                     // set state to edge specified
@@ -393,7 +394,7 @@ int main(int argc, char **argv) {
                         }
                         // if all checked, set graph
                         try {
-                            graph.reset(vertexCount);
+                            graph->reset(vertexCount);
                         } catch (std::exception &e) {
                             state = START;
                             throw; // rethrow the exception.
