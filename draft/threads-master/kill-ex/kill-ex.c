@@ -10,6 +10,8 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <time.h>
+#include <stdint.h>
 
 /*
  *
@@ -20,6 +22,9 @@
 void *p(void *arg) {
   printf("Thread %u up and running.\n", pthread_self());
   fflush(stdout);
+  // consuming some cpu time
+  for (unsigned int j = 0; j < 2000000; j++)
+               getppid();
   // thr_sleep(1, 0);
   sleep(10); //Suspends thread execution for a specified number of seconds.
   // https://www.ibm.com/docs/en/zos/2.4.0?topic=functions-sleep-suspend-execution-thread
@@ -64,6 +69,19 @@ int main() {
   if (ret = pthread_kill(t, 0)) {
     printf("main thread: kill() 3 returned error: %s\n", strerror(ret));
     fflush(stdout);
+  }
+
+  clockid_t cid;
+  if (ret = pthread_getcpuclockid(t, &cid)) {
+    printf("main thread: pthread_getcpuclockid() returned error: %s\n", strerror(ret));
+    fflush(stdout);
+  } else {
+    // extract timespec out of cid
+    struct timespec ts;
+    if (clock_gettime(cid, &ts) == -1) {
+      printf("main thread: clock_gettime() returned error: %s\n", strerror(ret));
+    }
+    printf("%4jd.%03ld\n", (intmax_t) ts.tv_sec, ts.tv_nsec / 1000000);
   }
 
   return 0;

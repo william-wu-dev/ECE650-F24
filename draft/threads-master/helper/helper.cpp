@@ -31,6 +31,15 @@ void thr_sleep(time_t sec, long nsec) {
   struct timeval now;
   struct timezone tz;
   struct timespec ts;
+  // https://man7.org/linux/man-pages/man3/timespec.3type.html
+  // Describes times in seconds and nanoseconds
+  // 
+  // #include <time.h>
+
+  //      struct timespec {
+  //          time_t     tv_sec;   /* Seconds */
+  //          /* ... */  tv_nsec;  /* Nanoseconds [0, 999'999'999] */
+  //      };
   int retcode;
 
   pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
