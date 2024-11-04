@@ -9,7 +9,7 @@
 #include <string>
 #include <utility>
 
-namespace a4 {
+namespace project {
     class GeneralException : public std::exception {
     private:
         std::string message;

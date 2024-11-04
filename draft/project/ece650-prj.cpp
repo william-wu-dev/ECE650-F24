@@ -24,10 +24,16 @@ const char GT = '>';
 const char LB = '{';
 const char RB = '}';
 
+/**
+ * This is the main thread, it deals with IO and creates three other threads for solving the VC problem
+ * @param argc Not required
+ * @param argv Not required
+ * @return 0 for success, non-0 otherwise
+ */
 int main(int argc, char **argv) {
     // initialize Finite State Machine
     auto state = START;
-    auto graph = a4::Graph(0); // initialize an empty graph
+    auto graph = project::Graph(0); // initialize an empty graph
     // read from stdin until EOF
     while (!std::cin.eof()) {
         // read a line of input until EOL and store in a string
@@ -63,7 +69,7 @@ int main(int argc, char **argv) {
                     if (input.fail()) {
                         // reset FSM to start over, because VE occurs together
                         state = START;
-                        throw a4::GeneralException("Unable to read command.");
+                        throw project::GeneralException("Unable to read command.");
                     }
                     if (command != 'V') {
                         // reset FSM to start over, because VE occurs together
@@ -71,7 +77,7 @@ int main(int argc, char **argv) {
                         std::string message = "expect \'V\' to start a graph specification, but receive: ";
                         message += command;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                         continue;
                     }
 
@@ -85,7 +91,7 @@ int main(int argc, char **argv) {
                         std::string message = "unable to read vertex specification in command: ";
                         message += line;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
                     // NOTE: do not just use eof here, because previous read is just for one character, input only know that
                     // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
@@ -99,7 +105,7 @@ int main(int argc, char **argv) {
                         std::string message = "encounter unexpected argument in command: ";
                         message += line;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
                     // if all checked, set graph
                     try {
@@ -119,7 +125,7 @@ int main(int argc, char **argv) {
                     if (input.fail()) {
                         // reset FSM to start over, because VE occurs together
                         state = START;
-                        throw a4::GeneralException("Unable to read command.");
+                        throw project::GeneralException("Unable to read command.");
                     }
                     if (command != 'E') {
                         // reset FSM to start over, because VE occurs together
@@ -127,7 +133,7 @@ int main(int argc, char **argv) {
                         std::string message = "expect \'E\' to specify edges, but receive: ";
                         message += command;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
 
                     // read edge specification
@@ -140,7 +146,7 @@ int main(int argc, char **argv) {
                         std::string message = "unable to read edge specification in command: ";
                         message += line;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
                     if (left_brace != LB) {
                         // encounter unexpected starting symbol
@@ -149,7 +155,7 @@ int main(int argc, char **argv) {
                         std::string message = "expect \'{\' to start edges specification, but receive: ";
                         message += left_brace;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
                     // use flag to control the edge parsing process
                     bool flag;
@@ -173,7 +179,7 @@ int main(int argc, char **argv) {
                             std::string message = "unable to read a \'<\' in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
                         if (less_than != LT) {
                             // not lt symbol
@@ -182,7 +188,7 @@ int main(int argc, char **argv) {
                             std::string message = "expect \'<\' in the specification of an edge, but receive: ";
                             message += less_than;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
 
                         // read a number
@@ -195,7 +201,7 @@ int main(int argc, char **argv) {
                             std::string message = "unable to read the starting vertex of an edge in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
 
                         // read a comma
@@ -208,7 +214,7 @@ int main(int argc, char **argv) {
                             std::string message = "unable to read a \',\' in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
                         if (comma != COMMA) {
                             // not comma symbol
@@ -217,7 +223,7 @@ int main(int argc, char **argv) {
                             std::string message = "expect \',\' in the specification of an edge, but receive: ";
                             message += comma;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
 
                         // read another number
@@ -230,7 +236,7 @@ int main(int argc, char **argv) {
                             std::string message = "unable to read the ending vertex of an edge in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
 
                         // read gt symbol
@@ -243,7 +249,7 @@ int main(int argc, char **argv) {
                             std::string message = "unable to read a \'>\' in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
                         if (greater_than != GT) {
                             // not lt symbol
@@ -252,7 +258,7 @@ int main(int argc, char **argv) {
                             std::string message = "expect \'>\' in the specification of an edge, but receive: ";
                             message += greater_than;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
 
                         // complete reading an edge, add it
@@ -274,7 +280,7 @@ int main(int argc, char **argv) {
                             std::string message = R"(unable to read a edge-separator ',' or end sign '}' in command: )";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
                         if (indicator != COMMA && indicator != RB) {
                             // unknown symbol
@@ -283,7 +289,7 @@ int main(int argc, char **argv) {
                             std::string message = "encounter unexpected symbol between edges: ";
                             message += indicator;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
 
                         if (indicator == COMMA) {
@@ -293,7 +299,7 @@ int main(int argc, char **argv) {
                         } else {
                             // reset FSM to start over, because VE occurs together
                             state = START;
-                            throw a4::GeneralException(R"(unexpected error.)");
+                            throw project::GeneralException(R"(unexpected error.)");
                         }
                     }
 
@@ -310,7 +316,7 @@ int main(int argc, char **argv) {
                         std::string message = "encounter unexpected argument in command: ";
                         message += line;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
 
 #if TEST_APPROX_VC_1
@@ -345,7 +351,7 @@ int main(int argc, char **argv) {
                     if (input.fail()) {
                         // remain at this state because a graph is already specified.
                         state = E_SPECIFIED;
-                        throw a4::GeneralException("Unable to read command.");
+                        throw project::GeneralException("Unable to read command.");
                     }
                     if (command != 'V') {
                         // reset FSM to start over, because VE occurs together
@@ -354,7 +360,7 @@ int main(int argc, char **argv) {
                                 R"(expect 'V' to start a graph specification, but receive: )";
                         message += command;
                         message += ".";
-                        throw a4::GeneralException(message);
+                        throw project::GeneralException(message);
                     }
 
                     if (command == 'V') {
@@ -369,7 +375,7 @@ int main(int argc, char **argv) {
                             std::string message = "unable to read vertex specification in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
                         // NOTE: do not just use eof here, because previous read is just for one character, input only know that
                         // the reading was a success, not knowing that it is now at EOF. So, we force it to read something,
@@ -383,7 +389,7 @@ int main(int argc, char **argv) {
                             std::string message = "encounter unexpected argument in command: ";
                             message += line;
                             message += ".";
-                            throw a4::GeneralException(message);
+                            throw project::GeneralException(message);
                         }
                         // if all checked, set graph
                         try {
@@ -396,7 +402,7 @@ int main(int argc, char **argv) {
                         state = V_SPECIFIED;
                     } else {
                         state = E_SPECIFIED;
-                        throw a4::GeneralException(R"(unexpected error.)");
+                        throw project::GeneralException(R"(unexpected error.)");
                     }
                     break;
                 }

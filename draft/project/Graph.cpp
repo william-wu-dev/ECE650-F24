@@ -15,7 +15,7 @@
 #define DEBUG_ITERATION false
 #define DEBUG_RANDOM false
 
-namespace a4 {
+namespace project {
     /**
      * generate random integer in range [min, max]
      * @param min floor of random integer, inclusive

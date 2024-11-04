@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 
-namespace a4 {
+namespace project {
     struct Edge {
         int from; // vertex incident from the edge
         int to; // vertex incident to the edge
