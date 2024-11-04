@@ -1,0 +1,8 @@
+# Test Case 2
+# ============
+# We will pass you a graph with a large number of vertices (less than 150) and we will
+# pass only one edge. We expect that you will print either of the two vertices of the
+# passed edge as the output.
+
+V 150
+E {<148, 149>}
