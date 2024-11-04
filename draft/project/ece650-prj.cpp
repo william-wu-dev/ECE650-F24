@@ -28,6 +28,7 @@ const char LB = '{';
 const char RB = '}';
 
 const int SLEEP_TIME = 2;
+const int GENERAL_SLEEP_TIME_MS = 600;
 
 /**
  * data structure for threads
@@ -469,7 +470,7 @@ int main(int argc, char **argv) {
                     pthread_create(&ApproxVC2Thread, nullptr, &ApproxVC2Run, &ApproxVC2Data);
 
                     // wait for a moment
-                    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(GENERAL_SLEEP_TIME_MS));
 
                     // makesure we will get the result from approx
                     pthread_join(ApproxVC1Thread, nullptr);
@@ -486,7 +487,7 @@ int main(int argc, char **argv) {
                         pthread_cancel(CNFSatVCThread);
                         // assign running time only when the time has not be computed yet
                         if (*CNFSatVCRT < 0) {
-                            *CNFSatVCRT = SLEEP_TIME * 1000 + 200;
+                            *CNFSatVCRT = SLEEP_TIME * 1000 + GENERAL_SLEEP_TIME_MS;
                         }
                     }
 
