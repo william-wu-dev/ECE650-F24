@@ -6,12 +6,13 @@
 #include <vector>
 #include "Graph.h"
 #include "GeneralException.h"
-#include <signal.h>
+#include <csignal>
 
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 #define DEBUG false
 #define WAIT_FOR_APPROX true
+#define ANALYSIS true
 
 
 enum State {
@@ -503,6 +504,60 @@ int main(int argc, char **argv) {
                     std::cout << result_str <<std::flush;
 
                     // TODO:collect analysis result
+                    // TODO: WE WILL FIRST USE MS AS UNIT OF TIME
+#if ANALYSIS
+                    std::string analysis_str;
+                    clockid_t CNFSatVCClockID, ApproxVC1ClockID, ApproxVC2ClockID;
+                    if (pthread_getcpuclockid(CNFSatVCThread, &CNFSatVCClockID)) {
+                        perror("Error");
+                    } else {
+                        // extract timespec out of cid
+                        struct timespec ts{};
+                        if (clock_gettime(CNFSatVCClockID, &ts)) {
+                            perror("Error");
+                        }
+                        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
+                        analysis_str += std::to_string(ms_time);
+                    }
+                    analysis_str += ",";
+
+                    if (pthread_getcpuclockid(ApproxVC1Thread, &ApproxVC1ClockID)) {
+                        perror("Error");
+                    } else {
+                        // extract timespec out of cid
+                        struct timespec ts{};
+                        if (clock_gettime(ApproxVC1ClockID, &ts)) {
+                            perror("Error");
+                        }
+                        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
+                        analysis_str += std::to_string(ms_time);
+                    }
+                    analysis_str += ",";
+
+                    if (pthread_getcpuclockid(ApproxVC2Thread, &ApproxVC2ClockID)) {
+                        perror("Error");
+                    } else {
+                        // extract timespec out of cid
+                        struct timespec ts{};
+                        if (clock_gettime(ApproxVC2ClockID, &ts)) {
+                            perror("Error");
+                        }
+                        auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
+                        analysis_str += std::to_string(ms_time);
+                    }
+                    analysis_str += ",";
+
+                    analysis_str += std::to_string(CNFSatVCResult->size());
+                    analysis_str += ",";
+
+                    analysis_str += std::to_string(ApproxVC1Result->size());
+                    analysis_str += ",";
+
+                    analysis_str += std::to_string(ApproxVC2Result->size());
+                    analysis_str += ",";
+
+                    std::cerr << analysis_str << std::endl << std::flush;
+#endif
 
 #if DEBUG
                     std::cerr << graph->toString() << std::endl << std::flush;
