@@ -18,10 +18,10 @@
  */
 
 void *p(void *arg) {
-  printf("Thread %d up and running.\n", pthread_self());
+  printf("Thread %u up and running.\n", pthread_self());
   fflush(stdout);
   thr_sleep(1, 0);
-  printf("Thread %d exiting.\n", pthread_self());
+  printf("Thread %u exiting.\n", pthread_self());
   fflush(stdout);
 }
 
