@@ -114,7 +114,7 @@ namespace project {
         edges.push_back({from, to, weight}); // we only want one direction added.
     }
 
-    std::vector<int> Graph::CNFSatVC() const noexcept(false) {
+    std::vector<int> Graph::CNFSatVC(const bool *flag) const noexcept(false) {
         if (edges.empty()) {
             const std::string message = "cannot compute vertex cover without edges in graph.";
             throw GeneralException(message);
@@ -122,9 +122,13 @@ namespace project {
 
         // create a solver
         // -- allocate on the heap so that we can reset later if needed
-        std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
+        auto solver = new Minisat::Solver();
         // iterate on the size of vertex cover
         for (auto k = 1; k <= vertexCount; k++) {
+            if (*flag) {
+                std::vector<int> dummy;
+                return dummy;
+            }
             // Big Step 1. determine whether this size k is correct
 #if DEBUG_ITERATION
             std::cerr << "Iteration on k: " << k << std::endl;
@@ -239,7 +243,8 @@ namespace project {
                 // reset the solver each time after we change the size of vertex cover.
                 // the next line de-allocates existing solver and allocates a new
                 // one in its place.
-                solver.reset(new Minisat::Solver());
+                delete solver;
+                solver = new Minisat::Solver();
             }
         }
 

@@ -30,7 +30,7 @@ namespace project {
 
         std::string toString() const;
 
-        std::vector<int> CNFSatVC() const;
+        std::vector<int> CNFSatVC(const bool* flag) const;
 
         std::vector<int> ApproxVC1() const;
 

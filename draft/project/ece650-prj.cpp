@@ -12,7 +12,7 @@
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 #define DEBUG false
-#define ANALYSIS true
+#define ANALYSIS false
 
 
 enum State {
@@ -34,16 +34,18 @@ const int GENERAL_SLEEP_TIME_MS = 600;
  * data structure for threads
  */
 struct Data {
-    Data(project::Graph *graph, std::vector<int> *result, double *running_time)
+    Data(project::Graph *graph, std::vector<int> *result, double *running_time, bool *flag)
         : graph(graph),
           result(result),
-          running_time(running_time) {
+          running_time(running_time),
+          flag(flag) {
     }
 
 
     project::Graph *graph;
     std::vector<int> *result;
     double *running_time;
+    bool *flag;
 
     Data() = default;
 };
@@ -58,8 +60,9 @@ void *CNFSatVCRun(void *_data) {
     const auto data = static_cast<Data *>(_data);
 
     // compute CNF-SAT-VC
-    *data->result = data->graph->CNFSatVC();
+    *data->result = data->graph->CNFSatVC(data->flag);
 
+#if ANALYSIS
     // compute cpu time
     clockid_t cid;
     const int ret = pthread_getcpuclockid(pthread_self(), &cid);
@@ -75,6 +78,7 @@ void *CNFSatVCRun(void *_data) {
         auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
         *data->running_time = ms_time;
     }
+#endif
 
     return nullptr;
 }
@@ -91,6 +95,7 @@ void *ApproxVC1Run(void *_data) {
     // compute ApproxVC1
     *data->result = data->graph->ApproxVC1();
 
+#if ANALYSIS
     // compute cpu time
     clockid_t cid;
     const int ret = pthread_getcpuclockid(pthread_self(), &cid);
@@ -106,6 +111,7 @@ void *ApproxVC1Run(void *_data) {
         auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
         *data->running_time = ms_time;
     }
+#endif
 
     return nullptr;
 }
@@ -122,6 +128,7 @@ void *ApproxVC2Run(void *_data) {
     // compute ApproxVC2
     *data->result = data->graph->ApproxVC2();
 
+#if ANALYSIS
     // compute cpu time
     clockid_t cid;
     const int ret = pthread_getcpuclockid(pthread_self(), &cid);
@@ -137,6 +144,7 @@ void *ApproxVC2Run(void *_data) {
         auto ms_time = static_cast<double>(ts.tv_sec) * 100 + static_cast<double>(ts.tv_nsec) / 1e6;
         *data->running_time = ms_time;
     }
+#endif
 
     return nullptr;
 }
@@ -161,6 +169,8 @@ int main(int argc, char **argv) {
     std::unique_ptr<double> CNFSatVCRT(new double());
     std::unique_ptr<double> ApproxVC1RT(new double());
     std::unique_ptr<double> ApproxVC2RT(new double());
+    // termination flag
+    std::unique_ptr<bool> TerminationFlag(new bool());
 
     // read from stdin until EOF
     while (!std::cin.eof()) {
@@ -448,18 +458,22 @@ int main(int argc, char **argv) {
                         throw project::GeneralException(message);
                     }
 
-                    // initialize output vector and running time
+                    // initialize output vector, running time and termination flag
                     CNFSatVCResult->clear();
                     ApproxVC1Result->clear();
                     ApproxVC2Result->clear();
                     *CNFSatVCRT = -1;
                     *ApproxVC1RT = -1;
                     *ApproxVC2RT = -1;
+                    *TerminationFlag = false;
 
                     // prepare data for each thread
-                    Data CNFSatVCData((graph.get()), (CNFSatVCResult.get()), (CNFSatVCRT.get()));
-                    Data ApproxVC1Data((graph.get()), (ApproxVC1Result.get()), (ApproxVC1RT.get()));
-                    Data ApproxVC2Data((graph.get()), (ApproxVC2Result.get()), (ApproxVC2RT.get()));
+                    Data CNFSatVCData((graph.get()), (CNFSatVCResult.get()), (CNFSatVCRT.get()),
+                                      (TerminationFlag.get()));
+                    Data ApproxVC1Data((graph.get()), (ApproxVC1Result.get()), (ApproxVC1RT.get()),
+                                       (TerminationFlag.get()));
+                    Data ApproxVC2Data((graph.get()), (ApproxVC2Result.get()), (ApproxVC2RT.get()),
+                                       (TerminationFlag.get()));
 
                     // creat thread
                     pthread_t CNFSatVCThread;
@@ -485,7 +499,12 @@ int main(int argc, char **argv) {
                         std::this_thread::sleep_for(std::chrono::seconds(SLEEP_TIME));
                         // we will cancel the thread if it's still there
                         pthread_cancel(CNFSatVCThread);
+                        // this cancellation won't work: https://sites.ualberta.ca/dept/chemeng/AIX-43/share/man/info/C/a_doc_lib/aixprggd/genprogc/term_threads.htm
+                        // The cancellation of a thread is requested by calling the pthread_cancel subroutine.
+                        // When the call returns, the request has been registered, but the thread may still be running.
+                        // The call to the pthread_cancel subroutine is unsuccessful only when the specified thread ID is not valid.
                         // assign running time only when the time has not be computed yet
+                        *TerminationFlag = true;
                         if (*CNFSatVCRT < 0) {
                             *CNFSatVCRT = SLEEP_TIME * 1000 + GENERAL_SLEEP_TIME_MS;
                         }
