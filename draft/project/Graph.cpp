@@ -122,7 +122,7 @@ namespace project {
 
         // create a solver
         // -- allocate on the heap so that we can reset later if needed
-        auto solver = new Minisat::Solver();
+        std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
         // iterate on the size of vertex cover
         for (auto k = 1; k <= vertexCount; k++) {
             if (*flag) {
@@ -246,8 +246,7 @@ namespace project {
                 // reset the solver each time after we change the size of vertex cover.
                 // the next line de-allocates existing solver and allocates a new
                 // one in its place.
-                delete solver;
-                solver = new Minisat::Solver();
+                solver.reset(new Minisat::Solver());
             }
         }
 
