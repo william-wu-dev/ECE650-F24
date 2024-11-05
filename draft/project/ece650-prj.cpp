@@ -12,7 +12,9 @@
 #define END_LINE_ENABLE true
 #define IGNORE_COMMENT true
 #define DEBUG false
-#define ANALYSIS false
+#define ANALYSIS true
+#define DEBUG_ACCESS false
+#define PREVENT_STACK_SCOPE true
 
 
 enum State {
@@ -27,7 +29,7 @@ const char GT = '>';
 const char LB = '{';
 const char RB = '}';
 
-const int SLEEP_TIME = 0;
+const int SLEEP_TIME = 1;
 const int GENERAL_SLEEP_TIME_MS = 600;
 
 /**
@@ -60,7 +62,22 @@ void *CNFSatVCRun(void *_data) {
     const auto data = static_cast<Data *>(_data);
 
     // compute CNF-SAT-VC
-    *data->result = data->graph->CNFSatVC(data->flag);
+    auto _result = data->graph->CNFSatVC(data->flag);
+
+#if DEBUG_ACCESS
+    std::cerr << "CNF done" << std::endl << std::flush;
+#endif
+
+    if (!_result.empty()) {
+#if DEBUG_ACCESS
+        std::cerr << "copy result" << std::endl << std::flush;
+#endif
+        *data->result = _result;
+    } else {
+#if DEBUG_ACCESS
+        std::cerr << "not copy result" << std::endl << std::flush;
+#endif
+    }
 
 #if ANALYSIS
     // compute cpu time
@@ -468,7 +485,8 @@ int main(int argc, char **argv) {
                     *ApproxVC2RT = -1;
                     // *TerminationFlag = false;
                     // std::unique_ptr<bool> TerminationFlag(new bool(false));  // this will create a new termination flag everytime
-                    auto TerminationFlag = new bool(false);
+                    bool tmp = false;
+                    auto TerminationFlag = &tmp;
                     TerminationFlags->push_back(TerminationFlag);
 
                     // prepare data for each thread
@@ -509,7 +527,10 @@ int main(int argc, char **argv) {
                         // The call to the pthread_cancel subroutine is unsuccessful only when the specified thread ID is not valid.
                         // assign running time only when the time has not be computed yet
                         *TerminationFlag = true;
-                        if (*CNFSatVCRT < 0) {
+#if PREVENT_STACK_SCOPE
+                        pthread_join(CNFSatVCThread, nullptr);
+#endif
+                        if (CNFSatVCResult->empty()) {
                             *CNFSatVCRT = SLEEP_TIME * 1000 + GENERAL_SLEEP_TIME_MS;
                         }
                     }
@@ -588,7 +609,7 @@ int main(int argc, char **argv) {
                     analysis_str += std::to_string(ApproxVC2Result->size());
                     analysis_str += ",";
 
-                    std::cerr << analysis_str << std::endl << std::flush;
+                    std::cout << analysis_str << std::endl << std::flush;
 #endif
 
 #if DEBUG
