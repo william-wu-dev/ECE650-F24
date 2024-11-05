@@ -171,6 +171,7 @@ int main(int argc, char **argv) {
     std::unique_ptr<double> ApproxVC2RT(new double());
     // termination flag
     // std::unique_ptr<bool> TerminationFlag(new bool(false));
+    std::unique_ptr<std::vector<bool*>> TerminationFlags(new std::vector<bool*>());
 
     // read from stdin until EOF
     while (!std::cin.eof()) {
@@ -466,15 +467,17 @@ int main(int argc, char **argv) {
                     *ApproxVC1RT = -1;
                     *ApproxVC2RT = -1;
                     // *TerminationFlag = false;
-                    std::unique_ptr<bool> TerminationFlag(new bool(false));  // this will create a new termination flag everytime
+                    // std::unique_ptr<bool> TerminationFlag(new bool(false));  // this will create a new termination flag everytime
+                    auto TerminationFlag = new bool(false);
+                    TerminationFlags->push_back(TerminationFlag);
 
                     // prepare data for each thread
                     Data CNFSatVCData((graph.get()), (CNFSatVCResult.get()), (CNFSatVCRT.get()),
-                                      (TerminationFlag.get()));
+                                      (TerminationFlags->back()));
                     Data ApproxVC1Data((graph.get()), (ApproxVC1Result.get()), (ApproxVC1RT.get()),
-                                       (TerminationFlag.get()));
+                                       (TerminationFlags->back()));
                     Data ApproxVC2Data((graph.get()), (ApproxVC2Result.get()), (ApproxVC2RT.get()),
-                                       (TerminationFlag.get()));
+                                       (TerminationFlags->back()));
 
                     // creat thread
                     pthread_t CNFSatVCThread;
