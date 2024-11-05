@@ -27,7 +27,7 @@ const char GT = '>';
 const char LB = '{';
 const char RB = '}';
 
-const int SLEEP_TIME = 2;
+const int SLEEP_TIME = 0;
 const int GENERAL_SLEEP_TIME_MS = 600;
 
 /**

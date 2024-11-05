@@ -12,7 +12,7 @@
 #include <memory>
 
 #define DEBUG_SINGLE false
-#define DEBUG_ITERATION false
+#define DEBUG_ITERATION true
 #define DEBUG_RANDOM false
 
 namespace project {
@@ -126,6 +126,9 @@ namespace project {
         // iterate on the size of vertex cover
         for (auto k = 1; k <= vertexCount; k++) {
             if (*flag) {
+#if DEBUG_ITERATION
+                std::cerr << "Termination Flag Received: " << flag << std::endl;
+#endif
                 std::vector<int> dummy;
                 return dummy;
             }
