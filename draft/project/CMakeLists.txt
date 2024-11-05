@@ -19,7 +19,7 @@ include_directories(${CMAKE_SOURCE_DIR}/minisat)
 
 option(WITH_ASAN "Enabled AddressSanitizer to detect memory faults" OFF)
 if (WITH_ASAN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
 endif ()
 
 # create the main executable
