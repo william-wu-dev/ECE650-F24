@@ -12,7 +12,7 @@
 #include <memory>
 
 #define DEBUG_SINGLE false
-#define DEBUG_ITERATION true
+#define DEBUG_ITERATION false
 #define DEBUG_RANDOM false
 
 namespace project {
