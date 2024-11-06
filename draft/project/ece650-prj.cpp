@@ -14,7 +14,7 @@
 #define DEBUG false
 #define ANALYSIS true
 #define DEBUG_ACCESS false
-#define PREVENT_STACK_SCOPE true
+#define PREVENT_STACK_SCOPE true  // set this true only when accepting mutiple graphs in one run.
 
 
 enum State {
@@ -585,7 +585,10 @@ int main(int argc, char **argv) {
 #if END_LINE_ENABLE
                     result_str += "\n";
 #endif
+
+#if !ANALYSIS // we don't want output vertex cover result during analysis
                     std::cout << result_str << std::flush;
+#endif
 
                     // TODO:collect analysis result
                     // TODO: WE WILL FIRST USE MS AS UNIT OF TIME
