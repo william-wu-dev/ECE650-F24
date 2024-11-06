@@ -19,6 +19,7 @@ include_directories(${CMAKE_SOURCE_DIR}/minisat)
 
 option(WITH_ASAN "Enabled AddressSanitizer to detect memory faults" OFF)
 if (WITH_ASAN)
+# you might want to disable address sanitizer for some feature will raise error.
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined")
 endif ()
 
