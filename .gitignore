@@ -50,3 +50,6 @@ Temporary Items
 a4/minisat
 draft/minisat-example/minisat
 draft/project/minisat
+
+# exclude test cases generated
+**/test_case_*-*-*_*-*-*/
