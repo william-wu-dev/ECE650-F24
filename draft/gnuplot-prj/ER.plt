@@ -6,7 +6,7 @@ set title "Effective Ratio"
 
 # Set the range of the axes
 set xrange [0:55]
-set yrange [0:*]
+set yrange [0.8:*]
 
 # Define the style of the error regions
 set style fill solid 0.5 border
@@ -19,5 +19,5 @@ set key left
 set term png size 800,600
 set output "ER.png"
 
-plot 'Effective Ratio.csv' using 1:2:($3):($4) with yerrorlines title "Approx-1-VC" dt 2 lc 0 lt 32, \
-     '' using 1:5:($6):($7) with yerrorlines title "Approx-2-VC" dt 3 lc 0 lt 32
+plot 'Effective Ratio.csv' using 1:2:($3):($4) with yerrorlines title "Approx-1-VC" dt 2 lc 2 lt 32, \
+     '' using 1:5:($6):($7) with yerrorlines title "Approx-2-VC" dt 3 lc 3 lt 32

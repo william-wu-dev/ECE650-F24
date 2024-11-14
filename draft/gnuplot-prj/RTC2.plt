@@ -17,8 +17,8 @@ set key left
 # Plot the data from the CSV file with low and high y values
 # plot "data.csv" using 1:2:3:4 with yerrorlines  title "CNF-SAT-VC"
 
-set term png size 800,600
+set term png size 800,800
 set output "RTC2.png"
 
-plot 'Running Time Compare 3.csv' using 1:5:($6):($7) with yerrorlines title "Approx-1-VC" dt 2 lc 0 lt 32, \
-     '' using 1:8:($9):($10) with yerrorlines title "Approx-2-VC" dt 3 lc 0 lt 32
+plot 'Running Time Compare 3.csv' using 1:5:($6):($7) with yerrorlines title "Approx-1-VC" dt 2 lc 2 lt 32, \
+     '' using 1:8:($9):($10) with yerrorlines title "Approx-2-VC" dt 3 lc 3 lt 32
