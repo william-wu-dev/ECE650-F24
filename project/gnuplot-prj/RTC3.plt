@@ -2,12 +2,13 @@ set datafile separator ","
 set xlabel "Number of Verticies"
 set ylabel "Running Time (ms)" 
 # set ylabel "Effective Ratio" 
-set title "Running Time Compare 3"
+set title "Running Time Comparison of 3"
 
 # Set the range of the axes
 set xrange [0:55]
 set yrange [0:800]
 set xtics 5
+set ytics 100
 
 # Define the style of the error regions
 set style fill solid 0.5 border

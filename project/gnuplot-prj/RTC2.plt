@@ -2,7 +2,7 @@ set datafile separator ","
 set xlabel "Number of Verticies"
 set ylabel "Running Time (ms)" 
 # set ylabel "Effective Ratio" 
-set title "Running Time Compare 2"
+set title "Running Time Comparison of 2"
 
 # Set the range of the axes
 set xrange [0:55]

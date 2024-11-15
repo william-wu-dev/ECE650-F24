@@ -2,7 +2,7 @@ set datafile separator ","
 set xlabel "Number of Verticies"
 set ylabel "Effective Ratio" 
 # set ylabel "Effective Ratio" 
-set title "Effective Ratio"
+set title "Effective Ratio Comparison"
 
 # Set the range of the axes
 set xrange [0:55]

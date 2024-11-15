@@ -17,6 +17,9 @@
 \usepackage{geometry}
 \geometry{portrait, margin=1in}
 
+\usepackage{graphicx}
+\graphicspath{ {./gnuplot-prj/} }
+
 
 \title{Project Report}
 \author{Yulin Wu, \#21130792}
@@ -26,6 +29,28 @@
 \maketitle
 
 \section{Some dummy text}
-\blindtext[10]
+\blindtext[5]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{RTC2.png}
+    \caption{Running Time Comparison of Approx-1-VC and Approx-2-VC}
+    \label{fig:RTC2}
+\end{figure}
+
+\blindtext[3]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{RTC3.png}
+    \caption{Running Time Comparison of CNF-SAT-VC, Approx-1-VC and Approx-2-VC}
+    \label{fig:RTC3}
+\end{figure}
+
+\blindtext[2]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{ER.png}
+    \caption{Effective Ratio Comparison of Approx-1-VC and Approx-2-VC}
+    \label{fig:ER}
+\end{figure}
 \end{document}
 
