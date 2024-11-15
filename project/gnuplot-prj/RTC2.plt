@@ -7,6 +7,8 @@ set title "Running Time Compare 2"
 # Set the range of the axes
 set xrange [0:55]
 set yrange [0:*]
+set xtics 5
+set ytics 0.1
 
 # Define the style of the error regions
 set style fill solid 0.5 border

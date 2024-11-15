@@ -6,7 +6,9 @@ set title "Effective Ratio"
 
 # Set the range of the axes
 set xrange [0:55]
-set yrange [0.8:*]
+set yrange [0.9:2]
+set xtics 5
+set ytics 0.1
 
 # Define the style of the error regions
 set style fill solid 0.5 border
