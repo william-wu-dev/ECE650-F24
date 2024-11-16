@@ -55,40 +55,57 @@ The test dataset is created in accordance to the project requirement: ten graphs
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{RTC3.png}
-    \caption{Running Time Comparison of CNF-SAT-VC, Approx-1-VC and Approx-2-VC}
+    \caption{Running Time Comparison of CNF-SAT-VC, APPROX-1-VC and APPROX-2-VC}
     \label{fig:RTC3}
 \end{figure}
 
-The running time of this project is measured by milliseconds. Figure \ref{fig:RTC3} is the running time comparison of all three approaches. Figure \ref{fig:RTC2} is a zoomed in running time comparison of Approx-1-VC and Approx-2-VC.
+The running time of this project is measured by milliseconds. Figure \ref{fig:RTC3} is the running time comparison of all three approaches. Figure \ref{fig:RTC2} is a zoomed in running time comparison of APPROX-1-VC and APPROX-2-VC.
 
 As shown in Figure \ref{fig:RTC3}, the time consumed by CNF-SAT-VC is significantly larger than the other two approaches as the number of vertices increases. The trend of the running time of CNF-SAT-VC as the number of vertices increases is exponential increase trend. The reason for this trend is that the CNF-SAT-VC approach enumerates the size of vertex cover in ascending order. Before finding the minimum vertex cover size, the approach already tried smaller size that will cause the encoded CNF unsatisfied. Since proving a CNF is unsatisfied runs at exponential time, the running time of the CNF-SAT-VC approach is also exponential. Eventually, when the number of vertices is greater and equal than \(20\), all graphs using CNF-SAT-VC approach result in timeout and this report omits the timeout result from the plot as timeout running time results are meaningless.
 
 The running time standard deviation of CNF-SAT-VC is relatively large. This unstable performance might result from the allocation routine of the CNF-SAT-VC approach. That is the allocation of variables and the SAT solver, and the solver itself might use some allocation when running. These allocation operations touch the computer memory, and the running time is impacted by the operating system and the number of users sharing the computer, leading to unstable performance.
 
-Figure \ref{fig:RTC2} gives a running time comparison of Approx-1-VC and Approx-2-VC.
+\vspace{6mm}
 
-\blindtext[1]
+Figure \ref{fig:RTC2} gives a running time comparison of APPROX-1-VC and APPROX-2-VC.
+
+The most apparent trend in this figure is that the running time of both APPROX-1-VC and APPROX-2-VC increase linearly as the number of vertices increases. This is because both approaches have their major iteration routines linearly related to the number of edges. Since all graph dataset used for testing have the same number of edges as the number of vertices, the major iteration routines in both APPROX-1-VC and APPROX-2-VC are linearly related to the number of vertices.
+
+It is also easy to notice that the standard deviation of APPROX-2-VC is significantly larger than APPROX-1-VC. The reason for this difference is that APPROX-2-VC utilize a random sub-routine to pick edges. This random process generates true random number from \texttt{/dev/urandom} to pick edges, which requires reading from a file. File reading process is managed by the operating system and also is affected by other users on the machine, resulting in unstable performance. On the contrary, APPROX-1-VC does not contain any file reading process. Apart from only one allocation of a bookkeeping vector for counting the number of edges incident on the vertices, other operations are numeric operations, which are stabler than file reading.
+
+Another obvious trend is that the running time of APPROX-2-VC increases faster than the running time of APPROX-1-VC. This is also resulted from the file reading process in generating random picks of edges in APPROX-2-VC. As the number of vertices increases, according to the observation of the test dataset, the number of edges equals to the number of vertices and also increases, leading to the number of random picks and the number of other numeric operations increases. Since the file reading process consume more time than other numeric operations, the running time of APPROX-2-VC increases faster than the running time of APPROX-1-VC as the number of vertices increases.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{RTC2.png}
-    \caption{Running Time Comparison of Approx-1-VC and Approx-2-VC}
+    \caption{Running Time Comparison of APPROX-1-VC and APPROX-2-VC}
     \label{fig:RTC2}
 \end{figure}
 
 \subsection{Effective Ratio}
+
+Figure \ref{fig:ER} demonstrates the effective ratio of APPROX-1-VC and APPROX-2-VC. The effective ratio is computed by the following equation:
+
+\begin{equation}
+    \label{eq:ER}
+    \text{Effective Ratio} = \frac{\text{Size of Approximate Minimum Vertex Cover}}{\text{Size of Actual Minimum Vertex Cover}}
+\end{equation}
+
+The size of actual minimum vertex cover in equation \eqref{eq:ER} is the result by CNF-SAT-VC. Since CNF-SAT-VC generates timeout and no minimum vertex cover is found after the number of vertices is greater than \(15\), the effective ratio is not plotted for the number of vertices is greater than \(15\).
+
+There are some trend shown in Figure \ref{fig:ER}. Firstly, the average effective ratio of APPROX-1-VC is very close to \(1\). This shows that always picking the most incident vertex as part of vertex cover is a great approximation for finding the minimum vertex cover. Secondly, the standard deviation effective ratio of APPROX-2-VC is larger than APPROX-1-VC. Because of random edge picking used in APPROX-2-VC, picking the an edge with both end points in the minimum vertex cover is a bang for luck, causing this unstable performance. Finally, the average effective ratio of APPROX-2-VC is \(1.5\) times of that of APPROX-1-VC. This is because the expected number of vertices of an edge in the minimum vertex cover is \(1.5\). Let random variable \(X\) denotes the number of of vertices of an edge in the minimum vertex cover. Then, \(X = 1\) or \(X = 2\). Since the graph is random generated, the probabilities \(Pr\left\{X = 1\right\} = 1/2 \) and \(Pr\left\{X = 2\right\} = 1/2 \). Therefore, the expected number of vertices of an edge in the minimum vertex cover is \(E\left[X\right] = 1 \times 1/2 + 2 \times 1/2  = 3/2 = 1.5\).
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{ER.png}
-    \caption{Effective Ratio Comparison of Approx-1-VC and Approx-2-VC}
+    \caption{Effective Ratio Comparison of APPROX-1-VC and APPROX-2-VC}
     \label{fig:ER}
 \end{figure}
 
-\blindtext[4]
-
 \section{Conclusion}
 
-The major find of the result shows that the CNF methods runs really slow when the graph has bigger size and approximation method can yield great approximation ratio.
+In the analysis of running time, CNF-SAT-VC runs exponential slower than APPROX-1-VC and APPROX-2-VC. The approximation methods runs at a linear time. In the analysis of effective ratio, APPROX-1-VC yields a really good approximation result compared to APPROX-2-VC. Although CNF-SAT-VC generates guaranteed minimum vertex cover, considering its awful running time, using the approximation approach APPROX-1-VC can be a better idea.
 
+In the future development, either reducing generated clauses by the CNF encoding of the minimum vertex cover problem to improve the running time of CNF-SAT-VC, or improve the approximation methods like adding some heuristic picking process can become a great research direction.
 
 \end{document}
