@@ -14,7 +14,7 @@
 #define DEBUG false
 #define ANALYSIS false
 #define DEBUG_ACCESS false
-#define PREVENT_STACK_SCOPE true  // set this true only when accepting mutiple graphs in one run.
+#define PREVENT_STACK_SCOPE true  // set this true only when accepting multiple graphs in one run.
 
 
 enum State {
@@ -168,11 +168,10 @@ void *ApproxVC2Run(void *_data) {
 
 /**
  * This is the main thread, it deals with IO and creates three other threads for solving the VC problem
- * @param argc Not required
- * @param argv Not required
- * @return 0 for success, non-0 otherwise
+ * @param _data Not Required
+ * @return N/A
  */
-int main(int argc, char **argv) {
+void *IORun(void *_data) {
     // initialize Finite State Machine
     auto state = START;
 
@@ -188,7 +187,7 @@ int main(int argc, char **argv) {
     std::unique_ptr<double> ApproxVC2RT(new double());
     // termination flag
     // std::unique_ptr<bool> TerminationFlag(new bool(false));
-    std::unique_ptr<std::vector<bool*>> TerminationFlags(new std::vector<bool*>());
+    std::unique_ptr<std::vector<bool *> > TerminationFlags(new std::vector<bool *>());
 
     // read from stdin until EOF
     while (!std::cin.eof()) {
@@ -698,5 +697,14 @@ int main(int argc, char **argv) {
 #endif
         }
     }
+
+    return nullptr;
+}
+
+int main(int argc, char *argv[]) {
+    // create and run io thread, remember to join!
+    pthread_t IOThread;
+    pthread_create(&IOThread, nullptr, &IORun, nullptr);
+    pthread_join(IOThread, nullptr);
     return 0;
 }
