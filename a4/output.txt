@@ -1,0 +1,93 @@
+Marking #103: StudentInfo(repo='y297wu', first='Yulin', last='Wu', watiam='y297wu', studentid=21130792, email='y297wu@uwaterloo.ca')
+Mark = 0
+
+Running test 0:	 +20
+
+
+--------------
+Running test: tests_a4/test01.in
+
+# test01.in
+# marks = 25
+
+V 120
+E {<110,115>}
+
+Output:
+----
+110
+----
+
+Expected result:
+----
+110
+or
+115
+----
+Comparison result:	NoneNone
+
+Marks: +25	(45 total)
+
+--------------
+Running test: tests_a4/test02.in
+
+# test03.in
+# marks = 25
+
+V 6
+E {<1,2>,<2,5>,<1,3>,<3,2>,<3,4>,<2,4>}
+
+Output:
+----
+2 3
+----
+
+Expected result:
+----
+2 3
+----
+Comparison result:	NoneNone
+
+Marks: +25	(70 total)
+
+--------------
+Running test: tests_a4/test03.in
+
+# test04.in 
+# marks = 25
+
+V 14
+E {<1,3>,<2,5>,<10,7>,<9,13>,<3,5>,<2,4>,<2,6>,<13,2>,<9,2>,<6,10>,<1,11>,<6,3>,<1,9>,<4,5>,<4,12>,<8,2>,<3,2>,<1,13>,<2,1>}
+
+Output:
+----
+1 2 3 4 9 10
+----
+
+Expected result:
+----
+1 2 3 4 9 10
+or
+1 2 3 4 10 13
+----
+Comparison result:	NoneNone
+
+Marks: +25	(95 total)
+
+
+--------------
+
+Finished marking
+Total mark: 95 / 95
+Final mark: 95
+
+           __    ______    ______   ________ 
+         _/  \  /      \  /      \ |        \
+        |   $$ |  $$$$$$\|  $$$$$$\ \$$$$$$$$
+         \$$$$  \$$__| $$ \$$__| $$    /  $$ 
+          | $$   |     $$  |     $$   /  $$  
+          | $$  __\$$$$$\ __\$$$$$\  /  $$   
+         _| $$_|  \__| $$|  \__| $$ /  $$    
+        |   $$ \\$$    $$ \$$    $$|  $$     
+         \$$$$$$ \$$$$$$   \$$$$$$  \$$      
+        
