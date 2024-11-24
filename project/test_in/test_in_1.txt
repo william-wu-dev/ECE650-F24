@@ -1,2 +1,7 @@
-V 5
-E {<1,5>,<5,2>,<1,4>,<4,5>,<4,3>,<2,4>}
+# test01.in
+# marks = 25
+# Test for not crashing. We will run your program and make sure that it does not crash.
+# 110 or 115
+
+V 120
+E {<110,115>}

@@ -69,7 +69,7 @@ else
 fi
 
 # change this to fit your test case count
-TEST_CASE_COUNT=8
+TEST_CASE_COUNT=12
 readonly TEST_CASE_COUNT
 
 printf "\n"
