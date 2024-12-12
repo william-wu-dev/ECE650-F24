@@ -1,0 +1,17 @@
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/ece650-prj.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/edit_cache.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/rebuild_cache.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/list_install_components.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/install.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/install/local.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/CMakeFiles/install/strip.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/minisat-lib-static.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/minisat-lib-shared.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/minisat_core.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/minisat_simp.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/edit_cache.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/rebuild_cache.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/list_install_components.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/install.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/install/local.dir
+/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat/CMakeFiles/install/strip.dir

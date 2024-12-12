@@ -1,0 +1,74 @@
+[
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build",
+  "command": "/usr/bin/c++  -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -std=c++11 -Wall  -g -o CMakeFiles/ece650-prj.dir/ece650-prj.cpp.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/ece650-prj.cpp",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/ece650-prj.cpp",
+  "output": "CMakeFiles/ece650-prj.dir/ece650-prj.cpp.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build",
+  "command": "/usr/bin/c++  -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -std=c++11 -Wall  -g -o CMakeFiles/ece650-prj.dir/Graph.cpp.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/Graph.cpp",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/Graph.cpp",
+  "output": "CMakeFiles/ece650-prj.dir/Graph.cpp.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -o CMakeFiles/minisat-lib-static.dir/minisat/utils/Options.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/Options.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/Options.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-static.dir/minisat/utils/Options.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -o CMakeFiles/minisat-lib-static.dir/minisat/utils/System.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/System.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/System.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-static.dir/minisat/utils/System.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -o CMakeFiles/minisat-lib-static.dir/minisat/core/Solver.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/core/Solver.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/core/Solver.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-static.dir/minisat/core/Solver.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -o CMakeFiles/minisat-lib-static.dir/minisat/simp/SimpSolver.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/simp/SimpSolver.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/simp/SimpSolver.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-static.dir/minisat/simp/SimpSolver.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -Dminisat_lib_shared_EXPORTS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -fPIC -o CMakeFiles/minisat-lib-shared.dir/minisat/utils/Options.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/Options.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/Options.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-shared.dir/minisat/utils/Options.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -Dminisat_lib_shared_EXPORTS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -fPIC -o CMakeFiles/minisat-lib-shared.dir/minisat/utils/System.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/System.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/utils/System.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-shared.dir/minisat/utils/System.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -Dminisat_lib_shared_EXPORTS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -fPIC -o CMakeFiles/minisat-lib-shared.dir/minisat/core/Solver.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/core/Solver.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/core/Solver.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-shared.dir/minisat/core/Solver.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -Dminisat_lib_shared_EXPORTS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -fPIC -o CMakeFiles/minisat-lib-shared.dir/minisat/simp/SimpSolver.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/simp/SimpSolver.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/simp/SimpSolver.cc",
+  "output": "minisat/CMakeFiles/minisat-lib-shared.dir/minisat/simp/SimpSolver.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -o CMakeFiles/minisat_core.dir/minisat/core/Main.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/core/Main.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/core/Main.cc",
+  "output": "minisat/CMakeFiles/minisat_core.dir/minisat/core/Main.cc.o"
+},
+{
+  "directory": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/grade_build/minisat",
+  "command": "/usr/bin/c++ -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat -g -o CMakeFiles/minisat_simp.dir/minisat/simp/Main.cc.o -c /home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/simp/Main.cc",
+  "file": "/home/l536zhan/ece650-marking-proj/grading/repos/y297wu/project/minisat/minisat/simp/Main.cc",
+  "output": "minisat/CMakeFiles/minisat_simp.dir/minisat/simp/Main.cc.o"
+}
+]

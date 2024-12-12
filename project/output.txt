@@ -1,0 +1,118 @@
+Marking #26: StudentInfo(repo='project', first='Yulin', last='Wu', watiam='y297wu', studentid='21130792', email='y297wu@uwaterloo.ca')
+Mark = 0
+
+Running test 0:	 +20 	 20 total
+
+
+--------------
+Running test: tests_vc-1/test01.in
+
+# test01.in
+# marks = 10
+
+V 5
+E {<1,2>,<1,3>,<1,4>,<1,5>}
+
+Output:
+----
+CNF-SAT-VC: 1
+APPROX-VC-1: 1
+APPROX-VC-2: 1,5
+----
+
+Expected result for vc-1 :
+----
+1
+----
+Comparison result:	Equal
+
+Marks: +10	(30 total)
+
+--------------
+Running test: tests_vc-1/test02.in
+
+# test02.in
+# marks = 10
+
+V 7
+E {<1,2>,<1,3>,<1,4>,<1,5>,<5,6>,<5,7>}
+Output:
+----
+CNF-SAT-VC: 1,5
+APPROX-VC-1: 1,5
+APPROX-VC-2: 1,4,5,7
+----
+
+Expected result for vc-1 :
+----
+1,5
+----
+Comparison result:	Equal
+
+Marks: +10	(40 total)
+
+--------------
+Running test: tests_vc-2/test03.in
+
+# test03.in 
+# marks = 10
+
+V 10
+E {<1,2>,<3,4>,<5,6>,<7,8>,<9,10>}
+
+Output:
+----
+CNF-SAT-VC: 1,3,5,7,9
+APPROX-VC-1: 1,3,5,7,9
+APPROX-VC-2: 1,2,3,4,5,6,7,8,9,10
+----
+
+Expected result for vc-2 :
+----
+1,2,3,4,5,6,7,8,9,10
+----
+Comparison result:	Equal
+
+Marks: +10	(50 total)
+
+--------------
+Running test: tests_vc-2/test04.in
+
+# test04.in
+# marks = 10
+
+V 4
+E {<1,2>,<2,3>,<4,3>,<4,1>}
+
+Output:
+----
+CNF-SAT-VC: 1,3
+APPROX-VC-1: 1,3
+APPROX-VC-2: 1,2,3,4
+----
+
+Expected result for vc-2 :
+----
+1,2,3,4
+----
+Comparison result:	Equal
+
+Marks: +10	(60 total)
+
+
+--------------
+
+Finished marking
+Total mark: 60 / 60
+Final mark: 60
+
+           __    ______    ______   ________ 
+         _/  \  /      \  /      \ |        \
+        |   $$ |  $$$$$$\|  $$$$$$\ \$$$$$$$$
+         \$$$$  \$$__| $$ \$$__| $$    /  $$ 
+          | $$   |     $$  |     $$   /  $$  
+          | $$  __\$$$$$\ __\$$$$$\  /  $$   
+         _| $$_|  \__| $$|  \__| $$ /  $$    
+        |   $$ \\$$    $$ \$$    $$|  $$     
+         \$$$$$$ \$$$$$$   \$$$$$$  \$$      
+        
